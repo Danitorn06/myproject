@@ -1,0 +1,15 @@
+.login-bg {
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Overlay ทำให้ภาพจางและฟอร์มอ่านง่าย */
+.login-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0,0,0,0.4); /* ปรับความเข้ม/จางได้ */
+  z-index: 0;
+}

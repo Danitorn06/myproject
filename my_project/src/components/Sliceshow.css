@@ -1,0 +1,22 @@
+.carousel-container {
+  max-height: 500px; /* กำหนดความสูงสูงสุด */
+  overflow: hidden;
+  border-radius: 15px; /* มุมโค้ง */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* เงา */
+}
+
+.carousel-container img {
+  object-fit: cover;
+  height: 500px; /* ให้รูปสูงเท่ากัน */
+}
+
+.carousel-caption {
+  background: rgba(0, 0, 0, 0.5); /* พื้นหลังโปร่งดำ */
+  border-radius: 10px;
+  padding: 15px 20px;
+}
+
+.carousel-caption h3,
+.carousel-caption p {
+  color: #fff !important; /* ให้ตัวหนังสือเป็นขาว */
+}
