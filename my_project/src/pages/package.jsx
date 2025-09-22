@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import './package.css';
 
 const Packages = () => {
   const [packages, setPackages] = useState([]);
@@ -47,9 +48,10 @@ const Packages = () => {
       }}
     >
       <Container>
-        <h2 className="text-center mb-5 fw-bold text-dark display-5">
-          แพ็กเกจค่าใช้บริการ
-        </h2>
+        <div className="header-section">
+          <h2>💳 แพ็กเกจค่าใช้บริการ</h2>
+          <p>เลือกแพ็กเกจที่เหมาะกับคุณ</p>
+        </div>
 
         {/* Header ตาราง */}
         <Row className="mb-4">

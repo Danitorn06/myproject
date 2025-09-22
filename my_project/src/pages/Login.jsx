@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Cookies from 'js-cookie';
 import './login.css'; 
 
 const Login = () => {
@@ -20,20 +21,34 @@ const Login = () => {
       const data = await res.json();
 
       if (!res.ok) {
-  setError(data.error || 'Login failed');
-} else {
-  localStorage.setItem('token', data.token); // เก็บ JWT token
-  localStorage.setItem('user', JSON.stringify(data.user)); // เก็บข้อมูล user
-  window.location.href = '/';
-}
+        setError(data.error || 'Login failed');
+      } else {
+        // ✅ เก็บ token, role, username ใน cookie (อายุ 1 วัน)
+        Cookies.set('token', data.token, { expires: 1 });
+        Cookies.set('role', data.user.role, { expires: 1 });
+        Cookies.set('username', data.user.username, { expires: 1 });
+
+        // ✅ เช็ค role ของ user
+        if (data.user.role === "admin") {
+          window.location.href = '/admin/news';
+        } else {
+          window.location.href = '/user/home';
+        }
+      }
     } catch (err) {
       setError('เกิดข้อผิดพลาดในการเชื่อมต่อ');
     }
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100 login-bg" style={{ backgroundImage: 'url(/images/lgbackground.jpg)' }}>
-      <div className="card shadow-lg p-5 rounded-4" style={{ maxWidth: "500px", width: "100%", backgroundColor: "rgba(255,255,255,0.85)", position: "relative", zIndex: 1 }}>
+    <div 
+      className="d-flex justify-content-center align-items-center vh-100 login-bg" 
+      style={{ backgroundImage: 'url(/images/lgbackground.jpg)' }}
+    >
+      <div 
+        className="card shadow-lg p-5 rounded-4" 
+        style={{ maxWidth: "500px", width: "100%", backgroundColor: "rgba(255,255,255,0.85)", position: "relative", zIndex: 1 }}
+      >
         <h2 className="text-center mb-4 text-primary" style={{ fontSize: "2rem" }}>เข้าสู่ระบบ</h2>
 
         <form onSubmit={handleSubmit}>

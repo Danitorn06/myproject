@@ -4,6 +4,20 @@ body, html {
   scroll-behavior: smooth;
 }
 
+/* ใช้ Kanit เป็นฟอนต์หลักทั้งเว็บ */
+body {
+  font-family: 'Kanit', sans-serif;
+  font-weight: 400; /* ปกติ */
+  margin: 0;
+  padding: 0;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Kanit', sans-serif;
+  font-weight: 700; /* ตัวหนา */
+}
+
 
 /* HEADER */
 .header {

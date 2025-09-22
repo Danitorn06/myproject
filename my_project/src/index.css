@@ -1,9 +1,11 @@
+/* ใช้ Kanit เป็นฟอนต์หลักทั้งเว็บ */
 body {
+  font-family: 'Kanit', sans-serif;
+  font-weight: 400; /* ปกติ */
   margin: 0;
-  font-family: 'Kanit', 'Sarabun', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
 }
+
 
 
 code {

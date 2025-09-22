@@ -1,0 +1,8 @@
+.footer a {
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer a:hover {
+  color: #ff7e5f; /* สีส้มเข้มตามเว็บ */
+}

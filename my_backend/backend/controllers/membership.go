@@ -16,10 +16,23 @@ func GetMemberships(c *gin.Context) {
 
 func CreateMembership(c *gin.Context) {
     var membership models.Membership
+
+    // รับค่า JSON จาก request body
     if err := c.ShouldBindJSON(&membership); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
-    config.DB.Create(&membership)
-    c.JSON(http.StatusCreated, membership)
+
+    // บันทึกลงฐานข้อมูล
+    if err := config.DB.Create(&membership).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    // ตอบกลับเมื่อสร้างเสร็จ
+    c.JSON(http.StatusCreated, gin.H{
+        "status":  "success",
+        "message": "Membership created successfully",
+        "data":    membership,
+    })
 }

@@ -1,55 +1,47 @@
-/* ================= HEADER ================= */
-.header {
-  background-color: #ff4500;
-  color: white;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky; /* Navbar ติดบนสุดเวลา scroll */
+/* ================= Navbar ================= */
+.custom-navbar {
+  background: linear-gradient(135deg, #ff4500, #ff7e5f);
+  padding: 0.8rem 1.5rem;
+  transition: all 0.3s ease;
+  position: sticky;
   top: 0;
   z-index: 1000;
+  font-family: 'Kanit', sans-serif; /* ใช้ฟอนต์ Kanit ทั้ง Navbar */
 }
 
-
-html {
-  overflow-y: scroll;
-}
-
-/* โลโก้ */
+/* Logo */
 .logo-container {
   display: flex;
   align-items: center;
 }
 
 .logo-img {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   object-fit: cover;
   margin-right: 12px;
+  transition: transform 0.3s ease;
+}
+
+.logo-img:hover {
+  transform: scale(1.1);
 }
 
 .logo-text {
-  font-size: 1.4rem;
-  font-weight: bold;
-  margin: 0;
-  letter-spacing: 1px;
-}
-
-/* ================= NAV ================= */
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.nav-link {
+  font-weight: 700;
+  font-size: 1.3rem;
   color: white;
-  text-decoration: none;
+  margin: 0;
+}
+
+/* Nav links */
+.nav-link {
+  color: white !important;
   font-weight: 500;
   position: relative;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  padding: 0.3rem 0.5rem;
 }
 
 .nav-link::after {
@@ -58,54 +50,83 @@ html {
   width: 0;
   height: 2px;
   left: 0;
-  bottom: -3px;
+  bottom: -4px;
   background-color: #fff;
   transition: width 0.3s ease;
 }
 
 .nav-link:hover {
-  color: #ffe4d1;
+  color: #ffe4d1 !important;
 }
 
 .nav-link:hover::after {
   width: 100%;
 }
 
-/* ================= AUTH BUTTONS ================= */
-.auth-buttons {
-  display: flex;
-  gap: 0.8rem;
+/* Active link */
+.nav-link.active-link {
+  color: #ffe4d1 !important;
+  font-weight: 700;
 }
 
-/* ปุ่ม Login และ Sign In */
+/* Buttons */
 .login-button,
 .sign-button {
-  padding: 0.4rem 1rem;
-  border: 2px solid white;
-  border-radius: 6px;
+  border-radius: 50px;
   font-weight: bold;
-  cursor: pointer;
-  text-decoration: none;
-  background-color: transparent; /* โปร่งใส */
+  transition: all 0.3s ease;
+  font-family: 'Kanit', sans-serif;
+}
+
+.login-button {
+  border: 2px solid white;
   color: white;
+  background-color: transparent;
+}
+
+.login-button:hover {
+  background-color: white;
+  color: #ff4500;
+}
+
+.login-button.active-btn {
+  background-color: white !important;
+  color: #ff4500 !important;
+}
+
+.sign-button {
+  background-color: white;
+  color: #ff4500;
+  border: none;
+}
+
+.sign-button:hover {
+  background-color: #ff7e5f;
+  color: white;
+}
+
+.sign-button.active-btn {
+  background-color: #ff7e5f !important;
+  color: white !important;
+}
+
+/* NavDropdown */
+.dropdown-menu {
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+.dropdown-item:hover {
+  background: #ff7e5f;
+  color: white !important;
   transition: all 0.3s ease;
 }
 
-/* Hover เหมือนกันทั้งคู่ */
-.login-button:hover,
-.sign-button:hover {
-  background-color: #fff;
-  color: #ff4500;
-  border-color: #fff;
-}
-
-/* ================= RESPONSIVE ================= */
+/* Responsive */
 @media (max-width: 768px) {
-  .nav {
-    display: none; /* ซ่อนเมนูหลัก */
-  }
-
-  .header {
-    justify-content: space-between;
+  .nav-link {
+    text-align: center;
+    padding: 0.5rem 0;
   }
 }
