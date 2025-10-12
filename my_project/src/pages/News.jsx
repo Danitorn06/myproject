@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Alert, Spinner, Card, Button } from 'react-bootstrap';
 import axios from 'axios';
 import './News.css';
-
 
 const News = ({ limit }) => {
   const [newsList, setNewsList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true);   // ✅ state โหลด
-  const [error, setError] = useState(null);       // ✅ state error
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const pageSize = limit || 9;
 
   useEffect(() => {
@@ -23,7 +22,7 @@ const News = ({ limit }) => {
       })
       .catch(err => {
         console.error("ดึงข่าวล้มเหลว:", err);
-        setError("ไม่สามารถดึงข้อมูลข่าวได้");
+        setError("❌ ไม่สามารถดึงข้อมูลข่าวได้");
         setLoading(false);
       });
   }, []);
@@ -35,76 +34,72 @@ const News = ({ limit }) => {
 
   return (
     <section className="container my-5">
-      {/* ✅ หัวข้อขึ้นตลอด */}
-      <div className="header-section">
+      <div className="header-section text-center mb-4">
         <h2>📰 ข่าวสารล่าสุด</h2>
         <p>อัปเดตเรื่องราวใหม่ๆ สำหรับคุณ</p>
       </div>
 
-      {/* ✅ ตอนโหลด */}
+      {/* 🔄 กำลังโหลด */}
       {loading && (
-        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "200px" }}>
-          <div className="text-center">
-            <div className="spinner-border text-warning mb-3" style={{ width: "3rem", height: "3rem" }} role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
-            <p className="text-muted">กำลังโหลดข่าวสาร กรุณารอสักครู่...</p>
-          </div>
-        </div>
+        <Card className="text-center shadow-sm border-0 mx-auto" style={{ maxWidth: "400px" }}>
+          <Card.Body>
+            <Spinner animation="border" variant="warning" className="mb-3" style={{ width: "3rem", height: "3rem" }} />
+            <Card.Text className="text-muted">⏳ กำลังโหลดข่าวสาร กรุณารอสักครู่...</Card.Text>
+          </Card.Body>
+        </Card>
       )}
 
-      {/* ✅ ถ้า error หรือไม่มีข้อมูล */}
+      {/* ⚠️ ไม่มีข้อมูลหรือ error */}
       {!loading && (error || newsList.length === 0) && (
-        <div className="alert alert-warning text-center shadow-sm">
-          {error || "ยังไม่มีข่าวสารในขณะนี้ 🙏"}
-        </div>
+        <Alert variant="warning" className="text-center shadow-sm mx-auto" style={{ maxWidth: "500px" }}>
+          {error || "📰 ยังไม่มีข่าวสารในขณะนี้ 🙏"}
+        </Alert>
       )}
 
-      {/* ✅ แสดงข่าวเมื่อโหลดเสร็จและมีข้อมูล */}
+      {/* ✅ แสดงข่าว */}
       {!loading && newsList.length > 0 && (
         <>
           <div className="row g-4">
             {currentNews.map(news => (
               <div className="col-md-6 col-lg-4" key={news.news_id}>
-                <div className="card h-100 shadow-sm">
+                <Card className="h-100 shadow-sm">
                   {news.image_url && (
-                    <img
+                    <Card.Img
+                      variant="top"
                       src={news.image_url}
-                      className="card-img-top"
                       alt={news.title}
                       style={{ height: '180px', objectFit: 'cover' }}
                     />
                   )}
-                  <div className="card-body d-flex flex-column">
-                    <h5 className="card-title">{news.title}</h5>
-                    <p className="card-text text-truncate">{news.content}</p>
-                    <Link to={`/news/${news.news_id}`} className="btn btn-warning mt-auto">
+                  <Card.Body className="d-flex flex-column">
+                    <Card.Title>{news.title}</Card.Title>
+                    <Card.Text className="text-truncate">{news.content}</Card.Text>
+                    <Button as={Link} to={`/news/${news.news_id}`} variant="warning" className="mt-auto">
                       อ่านเพิ่มเติม
-                    </Link>
-                  </div>
-                </div>
+                    </Button>
+                  </Card.Body>
+                </Card>
               </div>
             ))}
           </div>
 
-          {/* ✅ Pagination (เฉพาะตอนที่ไม่มี limit) */}
           {!limit && (
             <div className="d-flex justify-content-center align-items-center mt-4 gap-2">
-              <button
-                className="btn btn-outline-warning"
+              <Button
+                variant="outline-warning"
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
               >
                 ก่อนหน้า
-              </button>
+              </Button>
               <span>หน้า {currentPage} / {totalPages}</span>
-              <button
-                className="btn btn-outline-warning"
+              <Button
+                variant="outline-warning"
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
               >
                 ถัดไป
-              </button>
+              </Button>
             </div>
           )}
         </>

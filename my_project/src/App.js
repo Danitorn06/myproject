@@ -13,6 +13,7 @@ import Footer from './components/Footer';
 import AdminNews from './pages/admin/AdminNews';
 import CreateNews from './pages/admin/CreateNews';
 import EditNews from './pages/admin/EditNews';
+import AdminSchedule from './pages/admin/AdminSchedule'; // ✅ เพิ่มตรงนี้
 
 // PrivateRoute
 import PrivateRoute from './components/PrivateRoute';
@@ -66,6 +67,32 @@ function App() {
             element={
               <PrivateRoute roleRequired="admin">
                 <EditNews />
+              </PrivateRoute>
+            }
+          />
+
+          {/* หน้า Admin Schedule protected ด้วย PrivateRoute */}
+          <Route
+            path="/admin/schedule"
+            element={
+              <PrivateRoute roleRequired="admin">
+                <AdminSchedule />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/schedule/create"
+            element={
+              <PrivateRoute roleRequired="admin">
+                {/* คุณสามารถสร้างหน้า CreateSchedule */}
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/schedule/edit/:id"
+            element={
+              <PrivateRoute roleRequired="admin">
+                {/* คุณสามารถสร้างหน้า EditSchedule */}
               </PrivateRoute>
             }
           />

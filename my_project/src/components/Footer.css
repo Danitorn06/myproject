@@ -1,8 +1,35 @@
-.footer a {
-  text-decoration: none;
-  transition: color 0.3s;
+/* ปรับ footer links */
+.footer-links {
+  padding-left: 0;   /* เอา padding ของ ul ออก */
+  list-style: none;  /* เอา bullet ออก */
 }
 
-.footer a:hover {
-  color: #ff7e5f; /* สีส้มเข้มตามเว็บ */
+.footer-links li {
+  margin-bottom: 0.5rem;
+}
+
+/* ปุ่มลิงก์ */
+.footer-link-btn,
+.social-icon {
+  background: none;
+  border: none;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+  text-align: left; /* ชิดซ้าย */
+  display: block;   /* ให้เต็ม width ของ li */
+}
+
+/* หัวข้อ h6 ของแต่ละคอลัมน์ */
+.footer-links h6,
+.footer-links h6.fw-bold {
+  text-align: left; /* ชิดซ้าย */
+  margin-left: 0;   /* เอา margin ซ้ายออก */
+}
+
+/* social icons */
+.social-icon {
+  font-size: 1.2rem;
 }
