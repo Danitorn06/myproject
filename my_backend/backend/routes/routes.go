@@ -43,9 +43,9 @@ func SetupRoutes(r *gin.Engine) {
 
             // 📰 News (เฉพาะ admin)
             newsAdmin := protected.Group("/news")
-            newsAdmin.Use(middleware.RequireRoles("admin"))
+            newsAdmin.Use(middleware.AuthMiddleware())
             {
-                newsAdmin.POST("", controllers.CreateNews)
+                news.POST("", controllers.CreateNews)
                 news.PUT("/:id", controllers.UpdateNews)     // ✅ update
                 news.DELETE("/:id", controllers.DeleteNews)
             }

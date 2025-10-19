@@ -9,7 +9,6 @@ type News struct {
     ImageURL    string    `json:"image_url"`
     Type        string    `json:"type"` // general / health
     PublishDate time.Time `json:"publish_date"`
-    CreatedBy   uint      `json:"created_by"`
     CreatedAt   time.Time `json:"created_at"`
     UpdatedAt   time.Time `json:"updated_at"`
 }

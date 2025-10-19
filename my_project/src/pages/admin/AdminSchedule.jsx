@@ -10,11 +10,11 @@ const AdminSchedule = () => {
 
   const fetchClasses = async () => {
     try {
-      const res = await axiosInstance.get('/schedules');
+      const res = await axiosInstance.get('/classes');
       setClasses(Array.isArray(res.data) ? res.data : []);
       setLoading(false);
     } catch (err) {
-      console.error('Failed to fetch schedules:', err);
+      console.error('Failed to fetch classes:', err);
       setClasses([]);
       setLoading(false);
       if (err.response?.status === 401) window.location.href = '/login';
