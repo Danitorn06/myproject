@@ -38,19 +38,36 @@ func GetNewsByID(c *gin.Context) {
 
 // ✅ CreateNews
 func CreateNews(c *gin.Context) {
-    var news models.News
-    if err := c.ShouldBindJSON(&news); err != nil {
+    var input models.News
+    if err := c.ShouldBindJSON(&input); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
 
-    if err := config.DB.Create(&news).Error; err != nil {
+    // ดึง user_id จาก context
+    userIDInterface, exists := c.Get("user_id")
+    if !exists {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+        return
+    }
+
+    // ✅ convert float64 → uint
+    userIDFloat, ok := userIDInterface.(float64)
+    if !ok {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "invalid user_id type"})
+        return
+    }
+    input.CreatedBy = uint(userIDFloat)
+
+    if err := config.DB.Create(&input).Error; err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return
     }
 
-    c.JSON(http.StatusCreated, news)
+    c.JSON(http.StatusCreated, input)
 }
+
+
 
 // ✅ UpdateNews
 func UpdateNews(c *gin.Context) {

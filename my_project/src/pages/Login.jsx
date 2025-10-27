@@ -30,7 +30,7 @@ const Login = () => {
 
         // ✅ เช็ค role ของ user
         if (data.user.role === "admin") {
-          window.location.href = '/admin/news';
+          window.location.href = '/admin/dashboard';
         } else {
           window.location.href = '/user/home';
         }

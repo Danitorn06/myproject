@@ -7,33 +7,37 @@ const CreateNews = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [imageUrl, setImageUrl] = useState('');
-  const [type, setType] = useState('general'); // ✅ ประเภทข่าว
-  const [publishDate, setPublishDate] = useState(''); // ✅ วันที่เผยแพร่
+  const [type, setType] = useState('general');
+  const [publishDate, setPublishDate] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  // ✅ แปลง publishDate เป็น ISO 8601 (UTC)
-  const formattedDate = new Date(publishDate).toISOString().split('.')[0] + 'Z';
-  // ตัวอย่างผลลัพธ์ → "2025-10-13T00:00:00Z"
+    // แปลงวันที่เป็น ISO 8601 UTC
+    const formattedDate = new Date(publishDate).toISOString().split('.')[0] + 'Z';
 
-  try {
-    await axiosInstance.post('/news', {
-      title,
-      content,
-      image_url: imageUrl,
-      type,
-      publish_date: formattedDate, // ✅ ส่งค่าแบบ ISO
-    });
+    try {
+      await axiosInstance.post(
+        '/news',
+        {
+          title,
+          content,
+          image_url: imageUrl,
+          type,
+          publish_date: formattedDate,
+          // ❌ ไม่ต้องส่ง created_by → backend จะดึงจาก JWT cookie
+        },
+        { withCredentials: true } // ✅ ส่ง cookie JWT ไป backend
+      );
 
-    alert('เพิ่มข่าวเรียบร้อยแล้ว');
-    navigate('/admin/news');
-  } catch (err) {
-    console.error('เพิ่มข่าวล้มเหลว:', err.response?.data || err.message);
-    alert('เกิดข้อผิดพลาดในการเพิ่มข่าว');
-  }
-};
+      alert('เพิ่มข่าวเรียบร้อยแล้ว');
+      navigate('/admin/news');
+    } catch (err) {
+      console.error('เพิ่มข่าวล้มเหลว:', err.response?.data || err.message);
+      alert('เกิดข้อผิดพลาดในการเพิ่มข่าว');
+    }
+  };
 
   return (
     <Container className="my-5">
@@ -88,7 +92,6 @@ const CreateNews = () => {
                   </Form.Select>
                 </Form.Group>
 
-                {/* ✅ ฟิลด์วันที่เผยแพร่ */}
                 <Form.Group className="mb-3" controlId="newsDate">
                   <Form.Label>วันที่เผยแพร่</Form.Label>
                   <Form.Control
@@ -100,10 +103,7 @@ const CreateNews = () => {
                 </Form.Group>
 
                 <div className="d-flex justify-content-end gap-2">
-                  <Button 
-                    variant="secondary" 
-                    onClick={() => navigate('/admin/news')}
-                  >
+                  <Button variant="secondary" onClick={() => navigate('/admin/news')}>
                     ยกเลิก
                   </Button>
                   <Button variant="primary" type="submit">

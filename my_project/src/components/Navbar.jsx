@@ -63,6 +63,21 @@ const Navigation = () => {
                 >
                   จัดการตารางเวลา
                 </Nav.Link>
+                <Nav.Link
+                  as={Link}
+                  to="/admin/packages"
+                  className={`nav-link special-font ${isActive("/admin/packages") ? "active-link" : ""}`}
+                >
+                  จัดการแพ็กเกจ
+                </Nav.Link>
+                <Nav.Link
+                  as={Link}
+                  to="/admin/dashboard"
+                  className={`nav-link special-font ${isActive("/admin/dashboard") ? "active-link" : ""}`}
+                >
+                  DashBoard
+                </Nav.Link>
+
               </>
             )}
             {token ? (

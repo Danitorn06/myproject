@@ -43,7 +43,7 @@ const SignUp = () => {
           phone: formData.phone,
           email: formData.email,
           password: formData.password,
-          role: "external"
+          role: "user"
         })
       });
 

@@ -47,3 +47,6 @@ func ConnectDatabase() {
 	DB = database
 	log.Println("✅ Database เชื่อมต่อและ migrate สำเร็จ")
 }
+func GetJWTSecret() []byte {
+	return []byte(os.Getenv("JWT_SECRET"))
+}
