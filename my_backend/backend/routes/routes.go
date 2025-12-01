@@ -39,7 +39,7 @@ func SetupRoutes(r *gin.Engine) {
             // 👤 User routes
             user := protected.Group("/users")
             {
-                user.GET("", controllers.GetUsers)
+                user.GET("/me", controllers.GetCurrentUser)
             }
 
             // 📰 News (เฉพาะ admin)

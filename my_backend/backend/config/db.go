@@ -17,9 +17,19 @@ var DB *gorm.DB
 func ConnectDatabase() {
 	_ = godotenv.Load()
 
+	// 1) กำหนด Host ค่าตายตัวในโค้ด (ไม่ต้องอ่านจาก ENV)
+	host := "fitness_postgres"
+
+	// 2) ถ้ารันนอก Docker → switch เป็น localhost
+	//    Docker containers จะมี env HOSTNAME set ไว้เสมอ
+	//    แต่เครื่อง local มักไม่มี HOSTNAME fitness_postgres
+	if os.Getenv("HOSTNAME") == "" {
+		host = "localhost"
+	}
+
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
-		os.Getenv("DB_HOST"),
+		host,
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_NAME"),
@@ -28,10 +38,9 @@ func ConnectDatabase() {
 
 	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal("❌ ไม่สามารถเชื่อมต่อฐานข้อมูลได้:", err)
+		log.Fatal("❌ Database connection failed:", err)
 	}
 
-	// Auto migrate model ทั้งหมด
 	err = database.AutoMigrate(
 		&models.User{},
 		&models.Package{},
@@ -39,14 +48,15 @@ func ConnectDatabase() {
 		&models.FitnessClass{},
 		&models.News{},
 	)
-
 	if err != nil {
-		log.Fatal("❌ Migration ล้มเหลว:", err)
+		log.Fatal("❌ Migration failed:", err)
 	}
 
 	DB = database
-	log.Println("✅ Database เชื่อมต่อและ migrate สำเร็จ")
+	log.Println("✅ Database connected & migrated successfully!")
 }
+
+
 func GetJWTSecret() []byte {
 	return []byte(os.Getenv("JWT_SECRET"))
 }

@@ -13,9 +13,10 @@ import (
 
 // รับค่า email + password
 type LoginInput struct {
-	Email    string `json:"email" binding:"required,email"`
+	Login    string `json:"login" binding:"required"` // ✅ username/email ช่องเดียว
 	Password string `json:"password" binding:"required"`
 }
+
 
 // รับค่าสำหรับ register
 type RegisterInput struct {
@@ -29,25 +30,34 @@ type RegisterInput struct {
 
 // Login
 func Login(c *gin.Context) {
-	var input LoginInput
+	var input struct {
+		Login    string `json:"login" binding:"required"` // รับได้ทั้ง username หรือ email
+		Password string `json:"password" binding:"required"`
+	}
+
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	var user models.User
-	if err := config.DB.Where("email = ?", input.Email).First(&user).Error; err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid email or password"})
+
+	// 🔎 ค้นผู้ใช้จาก username หรือ email
+	if err := config.DB.
+		Where("username = ?", input.Login).
+		Or("email = ?", input.Login).
+		First(&user).Error; err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid username/email or password"})
 		return
 	}
 
-	// ตรวจสอบรหัสผ่าน
+	// 🔐 ตรวจสอบรหัสผ่าน
 	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(input.Password)); err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid email or password"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid username/email or password"})
 		return
 	}
 
-	// สร้าง JWT
+	// 🧾 สร้าง JWT
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id":  user.UserID,
 		"username": user.Username,
@@ -62,18 +72,10 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// ตั้งค่า HttpOnly cookie
-	c.SetCookie(
-		"token",
-		tokenString,
-		3600*24,
-		"/",
-		"localhost", // dev ใช้ localhost
-		false,
-		true,
-	)
+	// 🍪 Set cookie (dev localhost)
+	c.SetCookie("token", tokenString, 3600*24, "/", "localhost", false, true)
 
-	// ส่ง token กลับใน JSON ด้วย
+	// ✅ Response
 	c.JSON(http.StatusOK, gin.H{
 		"status":  "success",
 		"message": "login successful",
@@ -86,9 +88,10 @@ func Login(c *gin.Context) {
 			"role":      user.Role,
 			"qr_code":   user.QRCodePath,
 		},
-		"token": tokenString, // ✅ แสดง token ที่สร้าง
+		"token": tokenString,
 	})
 }
+
 
 
 // Logout

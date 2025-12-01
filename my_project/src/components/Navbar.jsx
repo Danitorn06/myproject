@@ -82,16 +82,26 @@ const Navigation = () => {
             )}
             {token ? (
               <NavDropdown title={`สวัสดี, ${username}`} id="user-nav-dropdown" align="end">
-                <NavDropdown.Item as="div" className="d-flex justify-content-end p-2">
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    onClick={handleLogout}
-                    className="w-100 d-flex align-items-center justify-content-center gap-1"
-                  >
-                    <i className="bi bi-box-arrow-right"></i> ออกจากระบบ
-                  </Button>
+
+                {/* ถ้าเป็น user */}
+                {role === "user" && (
+                  <NavDropdown.Item as={Link} to="/Myprofile">
+                    <i className="bi bi-person-circle me-2"></i> หน้าผู้ใช้
+                  </NavDropdown.Item>
+                )}
+
+                {/* ถ้าเป็น admin */}
+                {role === "admin" && (
+                  <NavDropdown.Item as={Link} to="/admin/dashboard">
+                    <i className="bi bi-speedometer2 me-2"></i> Dashboard Admin
+                  </NavDropdown.Item>
+                )}
+
+                {/* ปุ่มออกจากระบบสำหรับทุกคน */}
+                <NavDropdown.Item as="button" onClick={handleLogout} className="text-danger">
+                  <i className="bi bi-box-arrow-right me-1"></i> ออกจากระบบ
                 </NavDropdown.Item>
+
               </NavDropdown>
             ) : (
               <div className="d-flex gap-2 ms-3">

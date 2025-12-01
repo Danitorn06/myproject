@@ -6,8 +6,11 @@ import Schedule from './pages/Schedule';
 import Login from './pages/Login';
 import SignIn from './pages/SignIn';
 import Packages from './pages/package';
+import Myprofile from './pages/Myprofile';
+import Membership from  "./pages/Membership";
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+
 
 // หน้า Admin
 import DashBoard from './pages/admin/DashBoard';
@@ -48,6 +51,23 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signin" element={<SignIn />} />
 
+          {/* หน้า User protected ด้วย PrivateRoute */}
+          <Route
+            path="/Myprofile"
+            element={
+              <PrivateRoute roleRequired="user">
+                <Myprofile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/membership"
+            element={
+              <PrivateRoute roleRequired="user">
+                <Membership />
+              </PrivateRoute>
+            }
+          />
           {/* หน้า Admin News protected ด้วย PrivateRoute */}
           <Route
             path="/admin/dashboard"

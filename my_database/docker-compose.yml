@@ -11,6 +11,8 @@ services:
     ports:
       - "${POSTGRES_PORT}:5432"
     restart: unless-stopped
+    networks:
+      - fitness_net
 
   pgadmin:
     image: dpage/pgadmin4
@@ -25,7 +27,13 @@ services:
     restart: unless-stopped
     depends_on:
       - db
+    networks:
+      - fitness_net
 
 volumes:
   postgres_data:
   pgadmin_data:
+
+networks:
+  fitness_net:
+    driver: bridge
