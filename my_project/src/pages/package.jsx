@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";   // ← เพิ่ม
 import "./package.css";
 
 const Packages = () => {
   const [packages, setPackages] = useState({});
+  const navigate = useNavigate(); // ← เพิ่ม
 
   useEffect(() => {
     fetch("http://localhost:8080/api/v1/packages")
@@ -30,10 +32,15 @@ const Packages = () => {
     { key: "external", label: "บุคคลภายนอก" },
   ];
 
+  // 👉 เมื่อกดปุ่มสมัคร จะส่งข้อมูลไปหน้า PackageInfo
   const handleSubscribe = (durationLabel, userTypeLabel, price) => {
-    alert(
-      `คุณเลือกสมัครแพ็กเกจ: ${durationLabel} สำหรับ ${userTypeLabel} ราคา ${price} บาท`
-    );
+    navigate("/membership", {
+      state: {
+        duration: durationLabel,
+        userType: userTypeLabel,
+        price: price,
+      },
+    });
   };
 
   return (
@@ -54,16 +61,6 @@ const Packages = () => {
                   <Col key={type.key} xs={12} md={6} lg={4} className="mb-4">
                     <Card
                       className="shadow-lg border-0 rounded-4 h-100 card-hover"
-                      style={{
-                        transition: "0.3s",
-                        transform: "translateY(0)",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "translateY(-10px)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "translateY(0)";
-                      }}
                     >
                       <div
                         style={{
@@ -76,10 +73,9 @@ const Packages = () => {
                           justifyContent: "center",
                         }}
                       >
-                        <h2 className="text-white fw-bold m-0">
-                          {type.label}
-                        </h2>
+                        <h2 className="text-white fw-bold m-0">{type.label}</h2>
                       </div>
+
                       <Card.Body className="text-center d-flex flex-column justify-content-between">
                         <div>
                           <Card.Title className="fw-bold fs-4 text-dark">
@@ -89,6 +85,7 @@ const Packages = () => {
                             ราคาเริ่มต้น / {duration.label}
                           </Card.Text>
                         </div>
+
                         <Button
                           variant="danger"
                           className="rounded-pill px-4 py-2 fw-bold mt-3"

@@ -20,7 +20,7 @@ const Navigation = () => {
     setUsername(cookieUsername);
   }, []); // อ่าน cookie ตอน component mount
 
-  const isAdmin = role.toLowerCase() === 'admin';
+  //const isAdmin = role.toLowerCase() === 'admin';
 
   const handleLogout = () => {
     Cookies.remove('token');
@@ -47,57 +47,45 @@ const Navigation = () => {
             <Nav.Link as={Link} to="/news" className={`nav-link special-font ${isActive("/news") ? "active-link" : ""}`}>ข่าวสาร</Nav.Link>
             <Nav.Link as={Link} to="/package" className={`nav-link special-font ${isActive("/package") ? "active-link" : ""}`}>สมาชิก</Nav.Link>
 
-            {isAdmin && (
-              <>
-                <Nav.Link
-                  as={Link}
-                  to="/admin/news"
-                  className={`nav-link special-font ${isActive("/admin/news") ? "active-link" : ""}`}
-                >
-                  จัดการข่าวสาร
-                </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/admin/schedule"
-                  className={`nav-link special-font ${isActive("/admin/schedule") ? "active-link" : ""}`}
-                >
-                  จัดการตารางเวลา
-                </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/admin/packages"
-                  className={`nav-link special-font ${isActive("/admin/packages") ? "active-link" : ""}`}
-                >
-                  จัดการแพ็กเกจ
-                </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/admin/dashboard"
-                  className={`nav-link special-font ${isActive("/admin/dashboard") ? "active-link" : ""}`}
-                >
-                  DashBoard
-                </Nav.Link>
-
-              </>
-            )}
             {token ? (
               <NavDropdown title={`สวัสดี, ${username}`} id="user-nav-dropdown" align="end">
 
-                {/* ถ้าเป็น user */}
+                {/* เมนูของ user */}
                 {role === "user" && (
-                  <NavDropdown.Item as={Link} to="/Myprofile">
-                    <i className="bi bi-person-circle me-2"></i> หน้าผู้ใช้
-                  </NavDropdown.Item>
+                  <>
+                    <NavDropdown.Item as={Link} to="/Myprofile">
+                      <i className="bi bi-person-circle me-2"></i> ข้อมูลผู้ใช้
+                    </NavDropdown.Item>
+                  </>
                 )}
 
-                {/* ถ้าเป็น admin */}
+                {/* เมนูของ admin */}
                 {role === "admin" && (
-                  <NavDropdown.Item as={Link} to="/admin/dashboard">
-                    <i className="bi bi-speedometer2 me-2"></i> Dashboard Admin
-                  </NavDropdown.Item>
+                  <>
+                  <NavDropdown.Item as={Link} to="/admin/users">
+                      <i className="bi bi-people me-2"></i> จัดการผู้ใช้
+                    </NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/admin/news">
+                      <i className="bi bi-newspaper me-2"></i> จัดการข่าวสาร
+                    </NavDropdown.Item>
+
+                    <NavDropdown.Item as={Link} to="/admin/schedule">
+                      <i className="bi bi-calendar-check me-2"></i> จัดการตารางเวลา
+                    </NavDropdown.Item>
+
+                    <NavDropdown.Item as={Link} to="/admin/packages">
+                      <i className="bi bi-box-seam me-2"></i> จัดการแพ็กเกจ
+                    </NavDropdown.Item>
+                    
+                    <NavDropdown.Item as={Link} to="/admin/dashboard">
+                      <i className="bi bi-speedometer2 me-2"></i> Dashboard Admin
+                    </NavDropdown.Item>
+
+                    <NavDropdown.Divider />
+                  </>
                 )}
 
-                {/* ปุ่มออกจากระบบสำหรับทุกคน */}
+                {/* ปุ่มออกจากระบบ */}
                 <NavDropdown.Item as="button" onClick={handleLogout} className="text-danger">
                   <i className="bi bi-box-arrow-right me-1"></i> ออกจากระบบ
                 </NavDropdown.Item>
@@ -109,6 +97,7 @@ const Navigation = () => {
                 <Button as={Link} to="/signin" className={`sign-button ${isActive("/signin") ? "active-btn" : ""}`}>Sign In</Button>
               </div>
             )}
+
 
           </Nav>
         </Navbar.Collapse>

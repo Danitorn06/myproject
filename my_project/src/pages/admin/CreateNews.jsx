@@ -7,15 +7,29 @@ const CreateNews = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [preview, setPreview] = useState(null);
   const [type, setType] = useState('general');
   const [publishDate, setPublishDate] = useState('');
   const navigate = useNavigate();
 
+  // ⬆️ เมื่อเลือกรูป จะ Preview และแปลงเป็น Base64 (หรือจะอัปโหลดไป API ก็ได้)
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreview(reader.result);
+      setImageUrl(reader.result); // ส่ง base64 ไปเก็บใน backend
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // แปลงวันที่เป็น ISO 8601 UTC
-    const formattedDate = new Date(publishDate).toISOString().split('.')[0] + 'Z';
+    const formattedDate =
+      new Date(publishDate).toISOString().split('.')[0] + 'Z';
 
     try {
       await axiosInstance.post(
@@ -26,9 +40,8 @@ const CreateNews = () => {
           image_url: imageUrl,
           type,
           publish_date: formattedDate,
-          // ❌ ไม่ต้องส่ง created_by → backend จะดึงจาก JWT cookie
         },
-        { withCredentials: true } // ✅ ส่ง cookie JWT ไป backend
+        { withCredentials: true }
       );
 
       alert('เพิ่มข่าวเรียบร้อยแล้ว');
@@ -47,7 +60,9 @@ const CreateNews = () => {
             <Card.Body>
               <Card.Title className="mb-4">เพิ่มข่าว</Card.Title>
               <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3" controlId="newsTitle">
+
+                {/* TITLE */}
+                <Form.Group className="mb-3">
                   <Form.Label>หัวข้อ</Form.Label>
                   <Form.Control
                     type="text"
@@ -58,29 +73,37 @@ const CreateNews = () => {
                   />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="newsContent">
+                {/* IMAGE UPLOAD */}
+                <Form.Group className="mb-3">
+                  <Form.Label>เลือกรูปภาพ</Form.Label>
+                  <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
+                </Form.Group>
+
+                {preview && (
+                  <div className="mb-3 text-center">
+                    <img
+                      src={preview}
+                      alt="preview"
+                      style={{ maxWidth: '100%', height: 'auto', borderRadius: 8 }}
+                    />
+                  </div>
+                )}
+
+                {/* CONTENT */}
+                <Form.Group className="mb-3">
                   <Form.Label>เนื้อหา</Form.Label>
                   <Form.Control
                     as="textarea"
-                    rows={5}
-                    placeholder="กรอกเนื้อหาข่าว"
+                    rows={8}
+                    placeholder="พิมพ์เนื้อหา… "
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     required
                   />
                 </Form.Group>
 
-                <Form.Group className="mb-4" controlId="newsImage">
-                  <Form.Label>URL รูปภาพ</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="กรอก URL รูปภาพ (ถ้ามี)"
-                    value={imageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="newsType">
+                {/* TYPE */}
+                <Form.Group className="mb-3">
                   <Form.Label>ประเภทข่าว</Form.Label>
                   <Form.Select
                     value={type}
@@ -92,7 +115,8 @@ const CreateNews = () => {
                   </Form.Select>
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="newsDate">
+                {/* PUBLISH DATE */}
+                <Form.Group className="mb-3">
                   <Form.Label>วันที่เผยแพร่</Form.Label>
                   <Form.Control
                     type="date"
@@ -102,6 +126,7 @@ const CreateNews = () => {
                   />
                 </Form.Group>
 
+                {/* BUTTONS */}
                 <div className="d-flex justify-content-end gap-2">
                   <Button variant="secondary" onClick={() => navigate('/admin/news')}>
                     ยกเลิก
@@ -110,6 +135,7 @@ const CreateNews = () => {
                     บันทึก
                   </Button>
                 </div>
+
               </Form>
             </Card.Body>
           </Card>

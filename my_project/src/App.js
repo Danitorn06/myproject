@@ -20,6 +20,8 @@ import EditNews from './pages/admin/EditNews';
 import AdminSchedule from './pages/admin/AdminSchedule';
 import CreateSchedule from './pages/admin/CreateSchedule';
 import AdminPackage from './pages/admin/AdminPackage';
+import AdminUserList from './pages/admin/AdminUserList';
+import AdminCreateUser from './pages/admin/AdminCreateUser';
 
 // PrivateRoute
 import PrivateRoute from './components/PrivateRoute';
@@ -65,6 +67,22 @@ function App() {
             element={
               <PrivateRoute roleRequired="user">
                 <Membership />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <PrivateRoute roleRequired="admin">
+                <AdminUserList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/users/create"
+            element={
+              <PrivateRoute roleRequired="admin">
+                <AdminCreateUser />
               </PrivateRoute>
             }
           />

@@ -44,7 +44,7 @@ const NewsDetail = () => {
         )}
 
         <h2 className="mb-3 text-center">{news.title}</h2>
-        <p>{news.content}</p>
+        <p className="news-content">{news.content}</p>
         <p className="text-muted text-end mt-3">
           เผยแพร่เมื่อ: {new Date(news.publish_date).toLocaleDateString()}
         </p>

@@ -50,6 +50,13 @@ func SetupRoutes(r *gin.Engine) {
                 newsAdmin.PUT("/:id", controllers.UpdateNews)     // ✅ update
                 newsAdmin.DELETE("/:id", controllers.DeleteNews)
             }
+            admin := protected.Group("/admin")
+            admin.Use(middleware.RequireRoles("admin"))
+            {       
+            admin.GET("/users", controllers.GetUsers)
+            //admin.PUT("/users/:id", controllers.UpdateUser)
+            //admin.DELETE("/users/:id", controllers.DeleteUser)
+            }   
 
             // 🏋️‍♂️ Classes (admin, fitness_staff)
             classAdmin := protected.Group("/classes")
