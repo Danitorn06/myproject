@@ -1,7 +1,7 @@
 .carousel-container {
   max-height: 500px; /* กำหนดความสูงสูงสุด */
   overflow: hidden;
-  border-radius: 15px; /* มุมโค้ง */
+  border-radius: 0 0 15px 15px; /* มุมโค้ง */
   box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* เงา */
 }
 

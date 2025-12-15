@@ -19,7 +19,7 @@ func main() {
         AllowCredentials: true,
         MaxAge: 12 * time.Hour,
     }))
-
+    r.Static("/uploads", "./uploads")
     config.ConnectDatabase()
     routes.SetupRoutes(r)
     r.Run(":8080")

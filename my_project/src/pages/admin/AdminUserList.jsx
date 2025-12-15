@@ -74,7 +74,6 @@ export default function AdminUserList() {
             <th>Full Name</th>
             <th>Username</th>
             <th>Email</th>
-            <th>Phone</th>
             <th>Role</th>
             <th width="150px">Actions</th>
           </tr>
@@ -91,7 +90,6 @@ export default function AdminUserList() {
                 <td>{u.full_name}</td>
                 <td>@{u.username}</td>
                 <td>{u.email}</td>
-                <td>{u.phone || "-"}</td>
                 <td>{roleBadge(u.role)}</td>
                 <td>
                   <Button

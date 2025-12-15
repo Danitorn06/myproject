@@ -4,6 +4,9 @@ import (
     "backend/config"
     "backend/models"
     "net/http"
+    "os"
+    "time"
+    "fmt"
 
     "github.com/gin-gonic/gin"
     "gorm.io/gorm"
@@ -38,66 +41,73 @@ func GetNewsByID(c *gin.Context) {
 
 // ✅ CreateNews
 func CreateNews(c *gin.Context) {
-    var input models.News
-    if err := c.ShouldBindJSON(&input); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+    title := c.PostForm("title")
+    content := c.PostForm("content")
+    newsType := c.PostForm("type")
+    publishDateStr := c.PostForm("publish_date")
+
+    publishDate, _ := time.Parse(time.RFC3339, publishDateStr)
+
+    // 🔐 user id
+    userIDInterface, _ := c.Get("user_id")
+    userID := uint(userIDInterface.(float64))
+
+    // 📷 upload image
+    file, err := c.FormFile("image")
+    imageURL := ""
+
+    if err == nil {
+        filename := fmt.Sprintf("%d_%s", time.Now().Unix(), file.Filename)
+        path := "uploads/news/" + filename
+        os.MkdirAll("uploads/news", os.ModePerm)
+        c.SaveUploadedFile(file, path)
+        imageURL = "http://localhost:8080/" + path
+    }
+
+    news := models.News{
+        Title:       title,
+        Content:     content,
+        ImageURL:    imageURL,
+        Type:        newsType,
+        PublishDate: publishDate,
+        CreatedBy:   userID,
+    }
+
+    if err := config.DB.Create(&news).Error; err != nil {
+        c.JSON(500, gin.H{"error": err.Error()})
         return
     }
 
-    // ดึง user_id จาก context
-    userIDInterface, exists := c.Get("user_id")
-    if !exists {
-        c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
-        return
-    }
-
-    // ✅ convert float64 → uint
-    userIDFloat, ok := userIDInterface.(float64)
-    if !ok {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "invalid user_id type"})
-        return
-    }
-    input.CreatedBy = uint(userIDFloat)
-
-    if err := config.DB.Create(&input).Error; err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-        return
-    }
-
-    c.JSON(http.StatusCreated, input)
+    c.JSON(http.StatusOK, news)
 }
-
-
 
 // ✅ UpdateNews
 func UpdateNews(c *gin.Context) {
     id := c.Param("id")
     var news models.News
 
-    // หา record ก่อน
     if err := config.DB.First(&news, id).Error; err != nil {
-        if err == gorm.ErrRecordNotFound {
-            c.JSON(http.StatusNotFound, gin.H{"error": "News not found"})
-        } else {
-            c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-        }
+        c.JSON(404, gin.H{"error": "not found"})
         return
     }
 
-    var input models.News
-    if err := c.ShouldBindJSON(&input); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-        return
+    news.Title = c.PostForm("title")
+    news.Content = c.PostForm("content")
+    news.Type = c.PostForm("type")
+
+    file, err := c.FormFile("image")
+    if err == nil {
+        filename := fmt.Sprintf("%d_%s", time.Now().Unix(), file.Filename)
+        path := "uploads/news/" + filename
+        os.MkdirAll("uploads/news", os.ModePerm)
+        c.SaveUploadedFile(file, path)
+        news.ImageURL = "http://localhost:8080/" + path
     }
 
-    // อัปเดต
-    if err := config.DB.Model(&news).Updates(input).Error; err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-        return
-    }
-
+    config.DB.Save(&news)
     c.JSON(http.StatusOK, news)
 }
+
 
 // ✅ DeleteNews
 func DeleteNews(c *gin.Context) {

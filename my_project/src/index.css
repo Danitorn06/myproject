@@ -1,10 +1,18 @@
-
 /* ใช้ Kanit เป็นฟอนต์หลักทั้งเว็บ */
 body {
   font-family: 'Kanit', sans-serif;
   font-weight: 400; /* ปกติ */
   margin: 0;
   padding: 0;
+}
+
+* {
+  font-family: "Kanit", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6,
+.navbar, .header-section {
+  font-family: "Chakra Petch", sans-serif !important;
 }
 
 
@@ -43,4 +51,3 @@ code {
   scrollbar-width: thin;
   scrollbar-color: #ff4500 #f1f1f1;
 }
-

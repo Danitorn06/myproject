@@ -46,9 +46,9 @@ const Packages = () => {
   return (
     <div style={{ background: "#f8f9fa", minHeight: "100vh", padding: "80px 0" }}>
       <Container>
-        <div className="text-center mb-5">
-          <h1 className="fw-bold display-5">สมาชิกสำหรับทุกคน</h1>
-          <p className="text-muted fs-5">เลือกแพ็กเกจที่เหมาะกับคุณ</p>
+        <div className="header-section text-center mb-4">
+          <h2>💳 สมาชิกสำหรับทุกคน</h2>
+          <p>เลือกแพ็กเกจที่เหมาะกับคุณ</p>
         </div>
 
         {durations.map((duration) => (
