@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";   // ← เพิ่ม
+import { useNavigate } from "react-router-dom";
 import "./package.css";
 
 const Packages = () => {
   const [packages, setPackages] = useState({});
-  const navigate = useNavigate(); // ← เพิ่ม
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://localhost:8080/api/v1/packages")
       .then((res) => res.json())
       .then((data) => {
+        // จัดกลุ่ม packages ตาม duration และ user_type
         const grouped = {};
         data.forEach((pkg) => {
           if (!grouped[pkg.duration]) grouped[pkg.duration] = {};
-          grouped[pkg.duration][pkg.user_type] = pkg.price;
+          grouped[pkg.duration][pkg.user_type] = {
+            price: pkg.price,
+            package_id: pkg.package_id, // ✅ เพิ่ม package_id
+          };
         });
         setPackages(grouped);
       })
@@ -22,8 +26,8 @@ const Packages = () => {
   }, []);
 
   const durations = [
-    { key: "monthly", label: "รายเดือน" },
-    { key: "4-month", label: "4 เดือน" },
+    { key: "1", label: "รายเดือน" },
+    { key: "4", label: "4 เดือน" },
   ];
 
   const userTypes = [
@@ -32,13 +36,14 @@ const Packages = () => {
     { key: "external", label: "บุคคลภายนอก" },
   ];
 
-  // 👉 เมื่อกดปุ่มสมัคร จะส่งข้อมูลไปหน้า PackageInfo
-  const handleSubscribe = (durationLabel, userTypeLabel, price) => {
+  // ส่งข้อมูลไปหน้า Membership.jsx
+  const handleSubscribe = (durationLabel, userTypeLabel, packageData) => {
     navigate("/membership", {
       state: {
         duration: durationLabel,
         userType: userTypeLabel,
-        price: price,
+        price: packageData.price,
+        package_id: packageData.package_id, // ✅ ส่ง package_id ด้วย
       },
     });
   };
@@ -56,12 +61,10 @@ const Packages = () => {
             <h3 className="fw-bold text-center mb-4">{duration.label}</h3>
             <Row className="justify-content-center">
               {userTypes.map((type) => {
-                const price = packages[duration.key]?.[type.key];
+                const pkg = packages[duration.key]?.[type.key];
                 return (
                   <Col key={type.key} xs={12} md={6} lg={4} className="mb-4">
-                    <Card
-                      className="shadow-lg border-0 rounded-4 h-100 card-hover"
-                    >
+                    <Card className="shadow-lg border-0 rounded-4 h-100 card-hover">
                       <div
                         style={{
                           background: "#ff4500",
@@ -79,7 +82,7 @@ const Packages = () => {
                       <Card.Body className="text-center d-flex flex-column justify-content-between">
                         <div>
                           <Card.Title className="fw-bold fs-4 text-dark">
-                            {price ? `${price} บาท` : "-"}
+                            {pkg ? `${pkg.price} บาท` : "-"}
                           </Card.Title>
                           <Card.Text className="text-muted fs-6">
                             ราคาเริ่มต้น / {duration.label}
@@ -89,9 +92,9 @@ const Packages = () => {
                         <Button
                           variant="danger"
                           className="rounded-pill px-4 py-2 fw-bold mt-3"
-                          disabled={!price}
+                          disabled={!pkg}
                           onClick={() =>
-                            handleSubscribe(duration.label, type.label, price)
+                            handleSubscribe(duration.label, type.label, pkg)
                           }
                         >
                           สมัครเลย

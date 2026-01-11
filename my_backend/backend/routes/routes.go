@@ -75,7 +75,7 @@ func SetupRoutes(r *gin.Engine) {
             }
             // 💳 Memberships (เฉพาะ admin)
             membership := protected.Group("/memberships")
-            membership.Use(middleware.RequireRoles("admin"))
+            membership.Use(middleware.RequireRoles("user"))
             {
                 membership.GET("", controllers.GetMemberships)
                 membership.POST("", controllers.CreateMembership)

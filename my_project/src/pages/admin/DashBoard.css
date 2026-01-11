@@ -1,0 +1,34 @@
+/* ================= PRINT STYLE ================= */
+@media print {
+
+  body * {
+    visibility: hidden;
+  }
+
+  .dashboard-print,
+  .dashboard-print * {
+    visibility: visible;
+  }
+
+  .dashboard-print {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  /* ซ่อนปุ่ม */
+  .d-print-none {
+    display: none !important;
+  }
+
+  nav,
+  footer {
+    display: none !important;
+  }
+
+  /* คุมแบ่งหน้า */
+  .page-break {
+    page-break-after: always;
+  }
+}

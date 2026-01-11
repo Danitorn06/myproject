@@ -36,7 +36,9 @@ func ConnectDatabase() {
 		os.Getenv("DB_PORT"),
 	)
 
-	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+	DisableForeignKeyConstraintWhenMigrating: true,
+	})
 	if err != nil {
 		log.Fatal("❌ Database connection failed:", err)
 	}
@@ -47,6 +49,7 @@ func ConnectDatabase() {
 		&models.Membership{},
 		&models.FitnessClass{},
 		&models.News{},
+
 	)
 	if err != nil {
 		log.Fatal("❌ Migration failed:", err)

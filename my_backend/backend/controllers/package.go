@@ -55,7 +55,7 @@ func UpdatePackage(c *gin.Context) {
     if input.Price != 0 {
         pack.Price = input.Price
     }
-    if input.Duration != "" {
+    if input.Duration != 0 {
         pack.Duration = input.Duration
     }
     if input.UserType != "" {

@@ -1,5 +1,5 @@
 .schedule-section {
-  padding: 2rem ;
+  padding: 2rem;
   background-color: #ffffff;
 }
 
@@ -10,47 +10,65 @@
   color: #333;
 }
 
+/* ================= TABLE ================= */
 .schedule-table {
   width: 100%;
-  border-collapse: collapse;
   margin: 0 auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.schedule-table th, .schedule-table td {
-  padding: 1rem;
-  border: 1px solid #ddd;
-  text-align: center;
-}
-
+/* ================= TABLE HEADER ================= */
 .schedule-table th {
-  background-color: #ff4500;
-  color: white;
+  padding: 1rem;
+  background: linear-gradient(135deg, #ff6a00, #ff4500);
+  color: #ffffff;
+  font-weight: 600;
+  text-align: center;
+  border: none;
 }
 
+/* ================= TABLE CELL ================= */
 .schedule-table td {
-  background-color: #fff;
-}
-
-.schedule-table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-
-.cardio:hover {
-  background-color: #00bcd4; /* สีฟ้าน้ำทะเล */
-  color: white;
-}
-
-.flexibility:hover {
-  background-color: #4caf50; /* สีเขียว */
-  color: white;
-}
-
-.strength:hover {
-  background-color: #f44336; /* สีแดง */
-  color: white;
-}
-
-.cardio, .flexibility, .strength {
+  padding: 1rem;
+  text-align: center;
+  background-color: #ffffff;
+  border-top: 1px solid #eaeaea;
+  border-right: 1px solid #eaeaea;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+
+/* ================= CLASS TYPE COLORS (แสดงตลอด) ================= */
+
+/* ================= CLASS TYPE COLORS (FORCE) ================= */
+
+.schedule-table td.cardio {
+  background-color: #00bcd4 !important;
+  color: #ffffff !important;
+  font-weight: 500;
+}
+
+.schedule-table td.flexibility {
+  background-color: #4caf50 !important;
+  color: #ffffff !important;
+  font-weight: 500;
+}
+
+.schedule-table td.strength {
+  background-color: #f44336 !important;
+  color: #ffffff !important;
+  font-weight: 500;
+}
+
+.schedule-table td.cardio,
+.schedule-table td.flexibility,
+.schedule-table td.strength {
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
 }

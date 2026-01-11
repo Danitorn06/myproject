@@ -22,6 +22,7 @@ import CreateSchedule from './pages/admin/CreateSchedule';
 import AdminPackage from './pages/admin/AdminPackage';
 import AdminUserList from './pages/admin/AdminUserList';
 import AdminCreateUser from './pages/admin/AdminCreateUser';
+import AdminSettings from './pages/admin/AdminSetting';
 
 // PrivateRoute
 import PrivateRoute from './components/PrivateRoute';
@@ -42,7 +43,8 @@ function App() {
               <>
                 <Sliceshow />
                 <News limit={3} hideFilter={true} />
-                <Schedule />
+                
+                <Schedule showGuide={false} />
               </>
             }
           />
@@ -152,6 +154,14 @@ function App() {
             element={
               <PrivateRoute roleRequired="admin">
                 <AdminPackage />
+              </PrivateRoute>
+            }
+          />
+        <Route
+            path="/admin/settings"
+            element={
+              <PrivateRoute roleRequired="admin">
+                <AdminSettings />
               </PrivateRoute>
             }
           />

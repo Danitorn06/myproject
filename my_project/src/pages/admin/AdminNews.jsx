@@ -49,13 +49,6 @@ const AdminNews = () => {
         </Col>
       </Row>
 
-      {/* แสดงหัวข้อเสมอ */}
-      <Row className="fw-bold mb-2 d-none d-md-flex">
-        <Col md={5}>หัวข้อ</Col>
-        <Col md={3}>วันที่เผยแพร่</Col>
-        <Col md={4} className="text-center">จัดการ</Col>
-      </Row>
-
       {newsList.length === 0 ? (
         <Alert variant="info">ยังไม่มีข่าว</Alert>
       ) : (

@@ -22,28 +22,33 @@ func GetUserByID(c *gin.Context) {
     }
     c.JSON(http.StatusOK, user)
 }
+
 func GetCurrentUser(c *gin.Context) {
 	userID, exists := c.Get("user_id")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
-
 	var user models.User
-	// เปลี่ยนจาก id → user_id
 	if err := config.DB.First(&user, "user_id = ?", userID).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
 	}
-
 	var membership models.Membership
-	if err := config.DB.Where("user_id = ?", userID).First(&membership).Error; err != nil {
-		membership = models.Membership{}
+	err := config.DB.
+		Preload("Package"). // ✅ โหลดข้อมูล package
+		Where("user_id = ? AND status = ?", userID, "active").
+		Order("membership_id DESC").
+		First(&membership).Error
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"user":       user,
+			"membership": nil,
+		})
+		return
 	}
-
 	c.JSON(http.StatusOK, gin.H{
 		"user":       user,
 		"membership": membership,
 	})
 }
-

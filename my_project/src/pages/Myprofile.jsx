@@ -2,7 +2,21 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { Container, Row, Col, Card, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import 'bootstrap-icons/font/bootstrap-icons.css';
+import "bootstrap-icons/font/bootstrap-icons.css";
+
+/* ================= PACKAGE MAP ================= */
+const PACKAGE_MAP = {
+  // รายเดือน
+  1: { userType: "นักเรียน/นักศึกษา", duration: "รายเดือน" },
+  3: { userType: "บุคลากรในมหาวิทยาลัย", duration: "รายเดือน" },
+  5: { userType: "บุคคลภายนอก", duration: "รายเดือน" },
+
+  // 4 เดือน
+  2: { userType: "นักเรียน/นักศึกษา", duration: "4 เดือน" },
+  4: { userType: "บุคลากรในมหาวิทยาลัย", duration: "4 เดือน" },
+  6: { userType: "บุคคลภายนอก", duration: "4 เดือน" },
+};
+/* ================================================= */
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -13,24 +27,24 @@ export default function Profile() {
   useEffect(() => {
     const fetchCurrentUser = async () => {
       if (!token) {
-        navigate("/login"); // ถ้าไม่ login ให้เด้งไป login
+        navigate("/login");
         return;
       }
 
       try {
         const res = await fetch("http://localhost:8080/api/v1/users/me", {
           headers: { Authorization: `Bearer ${token}` },
-          credentials: "include", // ✅ เผื่อ backend อ่านจาก cookie ด้วย
+          credentials: "include",
         });
 
-        if (!res.ok) throw new Error("Unauthorized or User not found");
+        if (!res.ok) throw new Error("Unauthorized");
 
         const data = await res.json();
         setUser(data.user);
         setMembership(data.membership);
       } catch (err) {
         console.error(err);
-        navigate("/login"); // ถ้า token พัง ให้กลับไป login
+        navigate("/login");
       }
     };
 
@@ -39,10 +53,19 @@ export default function Profile() {
 
   if (!user) return <p className="text-center mt-5">Loading...</p>;
 
+  const packageInfo =
+    membership?.package_id && PACKAGE_MAP[membership.package_id]
+      ? PACKAGE_MAP[membership.package_id]
+      : null;
+
   return (
     <Container className="py-5">
-      <h2 className="mb-2" style={{ color: '#FF7F11' }}>My Profile</h2>
-      <p className="text-muted mb-4">Manage your account information and membership</p>
+      <h2 className="mb-2" style={{ color: "#FF7F11" }}>
+        My Profile
+      </h2>
+      <p className="text-muted mb-4">
+        Manage your account information and membership
+      </p>
 
       <Row className="g-4">
         {/* LEFT — PROFILE INFO */}
@@ -50,106 +73,121 @@ export default function Profile() {
           <Card
             className="shadow-lg h-100"
             style={{
-              borderRadius: '20px',
-              backgroundColor: '#ffffff',
-              padding: '1rem',
-              border: '2px solid #FF7F11',
-              color: '#1F1F1F'
+              borderRadius: "20px",
+              border: "2px solid #FF7F11",
             }}
           >
             <Card.Body>
-              <div className="d-flex justify-content-between align-items-center mb-4">
-                <h5 className="mb-0" style={{ color: '#FF7F11' }}>User Profile</h5>
-                <Button
-                  variant="light"
-                  size="sm"
-                  className="d-flex align-items-center gap-2 rounded-pill"
-                  style={{ backgroundColor: '#FF7F11', color: '#ffffff', fontWeight: 'bold' }}
-                >
-                  <i className="bi bi-pencil" />
-                  Edit
-                </Button>
-              </div>
-
               <div className="text-center mb-4">
                 <div
                   className="mx-auto rounded-circle d-flex align-items-center justify-content-center mb-3"
-                  style={{ width: '100px', height: '100px', backgroundColor: '#FF7F11' }}
+                  style={{
+                    width: 100,
+                    height: 100,
+                    backgroundColor: "#FF7F11",
+                  }}
                 >
-                  <i className="bi bi-person" style={{ fontSize: '48px', color: '#ffffff' }} />
+                  <i
+                    className="bi bi-person"
+                    style={{ fontSize: 48, color: "#fff" }}
+                  />
                 </div>
                 <h4 className="mb-1">{user.full_name}</h4>
-                <p className="text-muted mb-0">@{user.username}</p>
+                <p className="text-muted">@{user.username}</p>
               </div>
 
-              <div className="d-flex flex-column gap-3">
-                {[
-                  { icon: 'bi-envelope', label: 'Email', value: user.email },
-                  { icon: 'bi-person-badge', label: 'Full Name', value: user.full_name },
-                  { icon: 'bi-telephone', label: 'Phone', value: user.phone },
-                  { icon: 'bi-shield-lock', label: 'Role', value: user.role },
-                ].map((item, idx) => (
-                  <div key={idx} className="d-flex align-items-center gap-3 p-3 rounded-3" style={{ backgroundColor: '#FFF5EE' }}>
-                    <div className="rounded-circle d-flex align-items-center justify-content-center" style={{ width: 40, height: 40, backgroundColor: '#FF7F11' }}>
-                      <i className={`bi ${item.icon}`} style={{ fontSize: 20, color: '#fff' }} />
-                    </div>
-                    <div className="flex-grow-1">
-                      <small className="text-muted d-block">{item.label}</small>
-                      <span>{item.value}</span>
-                    </div>
+              {[
+                { icon: "bi-envelope", label: "Email", value: user.email },
+                { icon: "bi-telephone", label: "Phone", value: user.phone },
+                { icon: "bi-shield-lock", label: "Role", value: user.role },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="d-flex align-items-center gap-3 p-3 mb-3 rounded-3"
+                  style={{ backgroundColor: "#FFF5EE" }}
+                >
+                  <div
+                    className="rounded-circle d-flex align-items-center justify-content-center"
+                    style={{
+                      width: 40,
+                      height: 40,
+                      backgroundColor: "#FF7F11",
+                    }}
+                  >
+                    <i
+                      className={`bi ${item.icon}`}
+                      style={{ color: "#fff" }}
+                    />
                   </div>
-                ))}
-              </div>
+                  <div>
+                    <small className="text-muted">{item.label}</small>
+                    <div>{item.value}</div>
+                  </div>
+                </div>
+              ))}
             </Card.Body>
           </Card>
         </Col>
 
-        {/* RIGHT — MEMBERSHIP STATUS */}
+        {/* RIGHT — MEMBERSHIP */}
         <Col lg={6}>
           <Card
             className="shadow-lg h-100"
             style={{
-              borderRadius: '20px',
-              backgroundColor: '#ffffff',
-              padding: '1rem',
-              border: '2px solid #FF7F11',
-              color: '#1F1F1F'
+              borderRadius: "20px",
+              border: "2px solid #FF7F11",
             }}
           >
             <Card.Body>
               <div className="d-flex align-items-center gap-2 mb-4">
-                <i className="bi bi-award" style={{ fontSize: 24, color: '#FF7F11' }} />
-                <h5 className="mb-0" style={{ color: '#FF7F11' }}>Membership Status</h5>
+                <i
+                  className="bi bi-award"
+                  style={{ fontSize: 24, color: "#FF7F11" }}
+                />
+                <h5 style={{ color: "#FF7F11" }}>Membership Status</h5>
               </div>
 
-              {/* ❗ ถ้าไม่มี membership */}
-              {!membership || !membership.package_name ? (
+              {!membership || membership.status !== "active" ? (
                 <>
-                  <Alert variant="danger" className="rounded-3">
-                    You currently have no active membership.
+                  <Alert variant="danger">
+                    You currently have no active membership
                   </Alert>
-
-                  <div className="text-center mb-3">
-                    <Button
-                      className="px-5 py-2 border-0 rounded-pill w-100"
-                      style={{ backgroundColor: '#FF7F11', color: '#ffffff', fontWeight: 'bold' }}
-                      onClick={() => navigate("/package")}
-                    >
-                      สมัครสมาชิก
-                    </Button>
-                  </div>
-
-                  <Alert variant="warning" className="text-center rounded-3">
-                    ⚠️ ต้องสมัครสมาชิกก่อนจึงจะสามารถเข้าถึง QR Code
-                  </Alert>
+                  <Button
+                    className="w-100 rounded-pill"
+                    style={{ backgroundColor: "#FF7F11", border: "none" }}
+                    onClick={() => navigate("/package")}
+                  >
+                    สมัครสมาชิก
+                  </Button>
                 </>
               ) : (
-                /* ✅ ถ้ามี membership */
                 <>
-                  <Alert variant="success" className="rounded-3" style={{ backgroundColor: '#FF7F11', color: '#fff', border: 'none' }}>
-                    You are a <strong>{membership.package_name}</strong> member
+                  <Alert
+                    variant="success"
+                    style={{
+                      backgroundColor: "#FF7F11",
+                      border: "none",
+                      color: "#fff",
+                    }}
+                  >
+                    <strong>
+                      {packageInfo
+                        ? `${packageInfo.userType} • ${packageInfo.duration}`
+                        : "ไม่พบข้อมูลแพ็กเกจ"}
+                    </strong>
                   </Alert>
-                  <p className="text-center text-muted mb-3">หมดอายุ: {membership.expire_date}</p>
+
+                  {/* แสดงวันหมดอายุ + เวลา */}
+                  <p className="text-center text-muted">
+                    หมดอายุ:{" "}
+                    {new Date(membership.end_date).toLocaleString("th-TH", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
 
                   <div
                     style={{
@@ -157,21 +195,21 @@ export default function Profile() {
                       height: 150,
                       border: "2px dashed #FF7F11",
                       borderRadius: 12,
+                      margin: "0 auto",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      margin: "0 auto",
-                      fontSize: "0.9rem",
-                      color: "#FFA94D",
+                      color: "#FF7F11",
                     }}
                   >
-                    QR Code Preview
+                    QR Code
                   </div>
                 </>
               )}
             </Card.Body>
           </Card>
         </Col>
+
       </Row>
     </Container>
   );

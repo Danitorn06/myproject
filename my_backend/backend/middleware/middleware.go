@@ -4,7 +4,7 @@ import (
 	"backend/config"
 	"net/http"
 	"strings"
-	"time"
+	stdtime "time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
@@ -48,7 +48,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		// ตรวจสอบเวลา expire
 		if exp, ok := claims["exp"].(float64); ok {
-			if time.Now().Unix() > int64(exp) {
+			if stdtime.Now().Unix() > int64(exp) {
 				c.JSON(http.StatusUnauthorized, gin.H{"error": "token expired"})
 				c.Abort()
 				return
