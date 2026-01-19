@@ -29,7 +29,7 @@ export default function MembershipPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("http://localhost:8080/api/v1/memberships", {
+      const res = await fetch("http://localhost:8080/api/v1/membership", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

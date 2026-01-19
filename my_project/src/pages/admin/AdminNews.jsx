@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import axiosInstance from '../../axiosInstance';
+import './AdminNews.css';
 
 const AdminNews = () => {
   const [newsList, setNewsList] = useState([]);
@@ -40,7 +41,8 @@ const AdminNews = () => {
     <Container className="my-5">
       <Row className="align-items-center mb-4">
         <Col>
-          <h2>จัดการข่าว</h2>
+          <h2 className="mb-2" style={{ color: '#FF7F11' }}>จัดการข่าวสาร</h2>
+          <p className="text-muted mb-4">Manage News</p>
         </Col>
         <Col className="text-end">
           <Button as={Link} to="/admin/news/create" variant="primary">
@@ -52,36 +54,41 @@ const AdminNews = () => {
       {newsList.length === 0 ? (
         <Alert variant="info">ยังไม่มีข่าว</Alert>
       ) : (
-        <Row xs={1} sm={2} md={1} lg={1} className="g-3">
+        <Row xs={1} sm={2} md={3} lg={4} className="g-4">
           {newsList.map((news) => (
             <Col key={news.news_id}>
-              <Card className="h-100 shadow-sm">
+              <Card className="admin-news-card h-100">
                 {news.image && (
                   <Card.Img
-                    variant="top"
                     src={news.image}
                     alt={news.title}
-                    style={{ height: '180px', objectFit: 'cover' }}
+                    className="admin-news-image"
                   />
                 )}
+
                 <Card.Body className="d-flex flex-column">
-                  <Card.Title>{news.title}</Card.Title>
-                  <Card.Text className="text-muted mb-2">
-                    วันที่เผยแพร่: {new Date(news.publish_date).toLocaleDateString()}
-                  </Card.Text>
-                  <div className="mt-auto d-flex justify-content-end gap-2">
+                  <h6 className="fw-semibold text-truncate mb-1">
+                    {news.title}
+                  </h6>
+
+                  <small className="text-muted mb-3">
+                    {new Date(news.publish_date).toLocaleDateString('th-TH')}
+                  </small>
+
+                  <div className="d-flex gap-1 mt-2">
                     <Button
                       as={Link}
                       to={`/admin/news/edit/${news.news_id}`}
-                      variant="warning"
                       size="sm"
+                      className="btn-edit-mini"
                     >
                       แก้ไข
                     </Button>
+
                     <Button
-                      onClick={() => handleDelete(news.news_id)}
-                      variant="danger"
                       size="sm"
+                      className="btn-delete-mini"
+                      onClick={() => handleDelete(news.news_id)}
                     >
                       ลบ
                     </Button>

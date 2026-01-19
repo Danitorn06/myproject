@@ -1,3 +1,4 @@
+/* ================= SECTION ================= */
 .schedule-section {
   padding: 2rem;
   background-color: #ffffff;
@@ -34,41 +35,100 @@
 
 /* ================= TABLE CELL ================= */
 .schedule-table td {
-  padding: 1rem;
+  padding: 6px;
   text-align: center;
+  vertical-align: middle;
   background-color: #ffffff;
   border-top: 1px solid #eaeaea;
   border-right: 1px solid #eaeaea;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* ลบเส้นขวาสุด */
+.schedule-table td:last-child,
+.schedule-table th:last-child {
+  border-right: none;
+}
 
+/* ================= CELL HEIGHT ================= */
+.schedule-cell {
+  height: 90px;
+}
 
-/* ================= CLASS TYPE COLORS (แสดงตลอด) ================= */
+/* ================= IMAGE WRAPPER ================= */
+.class-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
 
-/* ================= CLASS TYPE COLORS (FORCE) ================= */
+/* ================= IMAGE ================= */
+.class-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-.schedule-table td.cardio {
-  background-color: #00bcd4 !important;
-  color: #ffffff !important;
+/* ================= CLASS NAME OVERLAY ================= */
+.class-name-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 4px 6px;
+  font-size: 12px;
   font-weight: 500;
+  color: #ffffff;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.6);
 }
 
-.schedule-table td.flexibility {
-  background-color: #4caf50 !important;
-  color: #ffffff !important;
-  font-weight: 500;
+/* ================= EMPTY CELL ================= */
+.empty-cell {
+  color: #cccccc;
+  font-size: 14px;
 }
 
-.schedule-table td.strength {
-  background-color: #f44336 !important;
-  color: #ffffff !important;
-  font-weight: 500;
+/* ================= CLASS TYPE COLORS ================= */
+
+/* Cardio */
+.cardio .class-name-overlay {
+  background: rgba(0, 188, 212, 0.85);
 }
 
-.schedule-table td.cardio,
-.schedule-table td.flexibility,
-.schedule-table td.strength {
-  border-radius: 6px;
-  transition: background-color 0.3s ease;
+/* Strength */
+.strength .class-name-overlay {
+  background: rgba(244, 67, 54, 0.85);
+}
+
+/* Flexibility */
+.flexibility .class-name-overlay {
+  background: rgba(76, 175, 80, 0.85);
+}
+
+/* ================= HOVER EFFECT ================= */
+.class-image-wrapper:hover {
+  transform: scale(1.03);
+  transition: transform 0.2s ease;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .schedule-title {
+    font-size: 1.5rem;
+  }
+
+  .class-image-wrapper {
+    height: 70px;
+  }
+
+  .class-name-overlay {
+    font-size: 11px;
+  }
+}
+.schedule-table td {
+  vertical-align: middle;
+  height: 90px; /* คุมความสูง */
 }

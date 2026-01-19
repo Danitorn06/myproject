@@ -23,6 +23,7 @@ import AdminPackage from './pages/admin/AdminPackage';
 import AdminUserList from './pages/admin/AdminUserList';
 import AdminCreateUser from './pages/admin/AdminCreateUser';
 import AdminSettings from './pages/admin/AdminSetting';
+import AdminMembershipList from './pages/admin/AdminMembershipList';
 
 // PrivateRoute
 import PrivateRoute from './components/PrivateRoute';
@@ -85,6 +86,14 @@ function App() {
             element={
               <PrivateRoute roleRequired="admin">
                 <AdminCreateUser />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/memberships"
+            element={
+              <PrivateRoute roleRequired="admin">
+                <AdminMembershipList />
               </PrivateRoute>
             }
           />

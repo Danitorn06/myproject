@@ -11,19 +11,36 @@ import (
 func GetClasses(c *gin.Context) {
     var classes []models.FitnessClass
 
-    result := config.DB.Raw(`
-        SELECT class_id, name, description, class_type, time, day_of_week, created_by, created_at, updated_at 
-        FROM fitnessclasses 
-        ORDER BY class_id ASC
-    `).Scan(&classes)
+    baseURL := "http://localhost:8080/uploads/class/"
 
-    if result.Error != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+    err := config.DB.Raw(`
+        SELECT 
+            class_id,
+            name,
+            description,
+            class_type,
+            time,
+            day_of_week,
+            created_by,
+            created_at,
+            updated_at,
+            CASE 
+                WHEN image_url IS NOT NULL AND image_url <> ''
+                THEN ? || image_url
+                ELSE NULL
+            END AS image_url
+        FROM fitnessclasses
+        ORDER BY class_id ASC
+    `, baseURL).Scan(&classes).Error
+
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return
     }
 
     c.JSON(http.StatusOK, classes)
 }
+
 
 // ✅ POST /classes
 func CreateClass(c *gin.Context) {

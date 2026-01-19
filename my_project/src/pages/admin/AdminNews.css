@@ -1,0 +1,47 @@
+/* ===== CARD ===== */
+.admin-news-card {
+  border: 2px solid #FF7F11;
+  border-radius: 16px;
+  background-color: #ffffff;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-news-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(255, 127, 17, 0.25);
+}
+
+/* ===== IMAGE ===== */
+.admin-news-image {
+  height: 120px;
+  object-fit: cover;
+}
+
+/* ===== BUTTONS ===== */
+.btn-edit-mini {
+  background-color: #FFF3E8;
+  border: 1px solid #FFB26B;
+  color: #C2410C;
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.btn-edit-mini:hover {
+  background-color: #FFD8B0;
+  color: #9A3412;
+}
+
+.btn-delete-mini {
+  background-color: #FEE2E2;
+  border: 1px solid #F87171;
+  color: #7F1D1D;
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.btn-delete-mini:hover {
+  background-color: #FCA5A5;
+}

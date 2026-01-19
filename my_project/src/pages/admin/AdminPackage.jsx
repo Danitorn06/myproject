@@ -43,31 +43,31 @@ const AdminPackage = () => {
   };
 
   // ✅ บันทึกราคาใหม่
-const handleSave = async (pkgId) => {
-  try {
-    await axiosInstance.put(
-      `/packages/${pkgId}`,
-      { price: parseFloat(editedPrice) },
-      { withCredentials: true }
-    );
+  const handleSave = async (pkgId) => {
+    try {
+      await axiosInstance.put(
+        `/packages/${pkgId}`,
+        { price: parseFloat(editedPrice) },
+        { withCredentials: true }
+      );
 
-    // ✅ อัปเดตราคาเฉพาะในรายการเดิมโดยไม่เปลี่ยนลำดับ
-    setPackages((prev) => {
-      const updated = [...prev];
-      const index = updated.findIndex((p) => p.package_id === pkgId);
-      if (index !== -1) {
-        updated[index] = { ...updated[index], price: editedPrice };
-      }
-      return updated;
-    });
+      // ✅ อัปเดตราคาเฉพาะในรายการเดิมโดยไม่เปลี่ยนลำดับ
+      setPackages((prev) => {
+        const updated = [...prev];
+        const index = updated.findIndex((p) => p.package_id === pkgId);
+        if (index !== -1) {
+          updated[index] = { ...updated[index], price: editedPrice };
+        }
+        return updated;
+      });
 
-    setEditingId(null);
-    alert("✅ อัปเดตราคาเรียบร้อยแล้ว");
-  } catch (err) {
-    console.error("อัปเดตราคาล้มเหลว:", err);
-    alert("❌ ไม่สามารถอัปเดตราคาได้");
-  }
-};
+      setEditingId(null);
+      alert("✅ อัปเดตราคาเรียบร้อยแล้ว");
+    } catch (err) {
+      console.error("อัปเดตราคาล้มเหลว:", err);
+      alert("❌ ไม่สามารถอัปเดตราคาได้");
+    }
+  };
   // ✅ ยกเลิกการแก้ไข
   const handleCancel = () => {
     setEditingId(null);
@@ -91,10 +91,21 @@ const handleSave = async (pkgId) => {
     <Container className="my-5">
       <Row className="justify-content-center">
         <Col md={10}>
-          <Card className="shadow-sm">
+          <Card
+            className="shadow-lg h-100"
+            style={{
+              borderRadius: '20px',
+              backgroundColor: '#ffffff',
+              padding: '1rem',
+              border: '2px solid #FF7F11'
+            }}
+          >
             <Card.Body>
               <div className="d-flex justify-content-between align-items-center mb-4">
-                <h4 className="mb-0">📦 จัดการแพ็กเกจ</h4>
+                <Col>
+                  <h2 className="mb-2" style={{ color: '#FF7F11' }}>จัดการแพ็กเกจ</h2>
+                  <p className="text-muted mb-4">Manage Package</p>
+                </Col>
                 <Button variant="success" onClick={() => window.location.reload()}>
                   🔄 โหลดข้อมูลใหม่
                 </Button>

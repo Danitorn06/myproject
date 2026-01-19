@@ -8,6 +8,7 @@ import (
 
 func SetupRoutes(r *gin.Engine) {
     api := r.Group("/api/v1")
+    
     {
         // ✅ Public routes (ไม่ต้อง login)
         auth := api.Group("/auth")
@@ -35,13 +36,19 @@ func SetupRoutes(r *gin.Engine) {
         // 🔒 Protected routes (ต้อง login)
         protected := api.Group("/")
         protected.Use(middleware.AuthMiddleware())
+        //protected.Use(middleware.UserLogMiddleware())  // ✅ log ทุก request
         {
             // 👤 User routes
             user := protected.Group("/users")
             {
                 user.GET("/me", controllers.GetCurrentUser)
             }
-
+            membership := protected.Group("/membership")
+            membership.Use(middleware.RequireRoles("user"))
+            {
+                membership.GET("", controllers.GetMemberships)
+                membership.POST("", controllers.CreateMembership)
+            }
             // 📰 News (เฉพาะ admin)
             newsAdmin := protected.Group("/news")
             newsAdmin.Use(middleware.RequireRoles("admin"))
@@ -74,12 +81,21 @@ func SetupRoutes(r *gin.Engine) {
                 packagesAdmin.DELETE("/:id", controllers.DeletePackage)
             }
             // 💳 Memberships (เฉพาะ admin)
-            membership := protected.Group("/memberships")
-            membership.Use(middleware.RequireRoles("user"))
+            membershipAdmin := protected.Group("/memberships")
+            membershipAdmin.Use(middleware.RequireRoles("admin"))
             {
-                membership.GET("", controllers.GetMemberships)
-                membership.POST("", controllers.CreateMembership)
+                membershipAdmin.GET("", controllers.GetAllMemberMemberships)
+                //membershipAdmin.PUT("/:id", controllers.UpdateMembershipStatus)
+                membershipAdmin.DELETE("/:id", controllers.DeleteMembership)
+               
             }
+            adminlog := protected.Group("/admin")
+            adminlog.Use(middleware.RequireRoles("admin"))
+            {
+                adminlog.GET("/logs", controllers.GetUserLogs)
+            }
+            
+            
 
             // 📦 Packages (เฉพาะ admin)
             /*packages := protected.Group("/packages")

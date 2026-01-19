@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Spinner, Container, Row, Col } from 'react-bootstrap';
+import { Button, Spinner, Container, Row, Col, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axiosInstance from '../../axiosInstance';
 import '../Schedule.css';
@@ -7,6 +7,7 @@ import '../Schedule.css';
 const AdminSchedule = () => {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [closedDays, setClosedDays] = useState({});
 
   // โหลดข้อมูลคลาสจาก backend
   const fetchClasses = async () => {
@@ -39,6 +40,18 @@ const AdminSchedule = () => {
     }
   };
 
+  const toggleClosedDay = (day) => {
+    setClosedDays(prev => {
+      const updated = { ...prev };
+      if (updated[day]) {
+        delete updated[day];
+      } else {
+        updated[day] = 'วันหยุดพิเศษ';
+      }
+      return updated;
+    });
+  };
+
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
   const times = ['07:00', '17:00', '17:45', '18:00', '19:15'];
 
@@ -54,7 +67,10 @@ const AdminSchedule = () => {
       {/* Header */}
       <Row className="mb-3">
         <Col className="d-flex justify-content-between align-items-center">
-          <h2>📅 จัดการตารางคลาส</h2>
+        <Col>
+          <h2 className="mb-2" style={{ color: '#FF7F11' }}>จัดการตารางเวลา</h2>
+          <p className="text-muted mb-4">Manage Schedules</p>
+        </Col>
           <Button variant="success" onClick={fetchClasses}>
             🔄 โหลดข้อมูลใหม่
           </Button>
@@ -80,7 +96,22 @@ const AdminSchedule = () => {
           <tbody>
             {daysOfWeek.map((day) => (
               <tr key={day}>
-                <td><strong>{day}</strong></td>
+                <td><strong>{day}</strong>
+                  <div className="mt-1">
+                    <Button
+                      size="sm"
+                      variant={closedDays[day] ? 'danger' : 'outline-danger'}
+                      onClick={() => toggleClosedDay(day)}
+                    >
+                      {closedDays[day] ? '🚫 ยกเลิกวันหยุด' : '🚫 ปิดวันนี้'}
+                    </Button>
+                  </div>
+                  {closedDays[day] && (
+                    <Badge bg="danger" className="mt-1">
+                      วันหยุด
+                    </Badge>
+                  )}
+                </td>
                 {times.map((time) => {
                   const cls = getClassForSlot(day, time);
                   return (
@@ -88,47 +119,53 @@ const AdminSchedule = () => {
                       key={time}
                       className={cls ? cls.class_type?.toLowerCase() : 'empty-slot'}
                     >
-                      <div className="d-flex flex-column align-items-start">
-                        {cls ? (
-                          <>
-                            <span className="fw-semibold">{cls.name}</span>
-                            <div className="d-flex gap-1 mt-2">
-                              {/* แก้ไขคลาส */}
+                      {closedDays[day] ? (
+                        <span className="text-danger fw-semibold">
+                          ❌ หยุดทำการ
+                        </span>
+                      ) : (
+                        <div className="d-flex flex-column align-items-start">
+                          {cls ? (
+                            <>
+                              <span className="fw-semibold">{cls.name}</span>
+                              <div className="d-flex gap-1 mt-2">
+                                {/* แก้ไขคลาส */}
+                                <Button
+                                  as={Link}
+                                  to={`/admin/schedule/create?mode=edit&id=${cls.class_id}`}
+                                  size="sm"
+                                  variant="warning"
+                                >
+                                  ✏️ แก้ไข
+                                </Button>
+
+                                {/* ลบคลาส */}
+                                <Button
+                                  size="sm"
+                                  variant="danger"
+                                  onClick={() => handleDelete(cls.class_id)}
+                                >
+                                  🗑️ ลบ
+                                </Button>
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <span className="text-muted">ยังไม่มีคลาส</span>
+                              {/* เพิ่มคลาส */}
                               <Button
                                 as={Link}
-                                to={`/admin/schedule/create?mode=edit&id=${cls.class_id}`}
+                                to={`/admin/schedule/create?mode=add&day=${day}&time=${time}`}
                                 size="sm"
-                                variant="warning"
+                                variant="success"
+                                className="mt-1"
                               >
-                                ✏️ แก้ไข
+                                ➕ เพิ่มคลาส
                               </Button>
-
-                              {/* ลบคลาส */}
-                              <Button
-                                size="sm"
-                                variant="danger"
-                                onClick={() => handleDelete(cls.class_id)}
-                              >
-                                🗑️ ลบ
-                              </Button>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <span className="text-muted">ยังไม่มีคลาส</span>
-                            {/* เพิ่มคลาส */}
-                            <Button
-                              as={Link}
-                              to={`/admin/schedule/create?mode=add&day=${day}&time=${time}`}
-                              size="sm"
-                              variant="success"
-                              className="mt-1"
-                            >
-                              ➕ เพิ่มคลาส
-                            </Button>
-                          </>
-                        )}
-                      </div>
+                            </>
+                          )}
+                        </div>
+                      )}
                     </td>
                   );
                 })}

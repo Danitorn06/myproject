@@ -80,5 +80,15 @@ CREATE TABLE ScanLogs (
     user_id INTEGER REFERENCES Users(user_id),
     scan_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE user_logs (
+    log_id SERIAL PRIMARY KEY,
+    user_id INT,
+    role VARCHAR(20),
+    action VARCHAR(50),
+    description TEXT,
+    ip_address VARCHAR(45),
+    user_agent TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 

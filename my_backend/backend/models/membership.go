@@ -14,7 +14,6 @@ type Membership struct {
 	Status    string    `json:"status"`
 	CreatedAt time.Time `json:"created_at"`
 
-	User    *User    `gorm:"foreignKey:UserID" json:"user"`
-	Package *Package `gorm:"foreignKey:PackageID" json:"package"`
+	User    User    `gorm:"foreignKey:UserID;references:UserID" json:"user"`
+	Package Package `gorm:"foreignKey:PackageID;references:PackageID" json:"package"`
 }
-

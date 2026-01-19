@@ -76,8 +76,18 @@ const Schedule = ({ showGuide = true }) => {
                   const cls = getClassForSlot(day, time);
                   return (
                     <td key={time} className={cls ? cls.class_type?.toLowerCase() : ''}>
-                      {cls ? cls.name : '-'}
+                      {cls ? (
+                        <div className="class-cell">
+                          <img
+                            src={cls.image_url}
+                            alt={cls.name}
+                            className="class-image"
+                          />
+                          <div className="class-name">{cls.name}</div>
+                        </div>
+                      ) : '-'}
                     </td>
+
                   );
                 })}
               </tr>

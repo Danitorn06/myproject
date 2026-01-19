@@ -1,0 +1,142 @@
+.schedule-section {
+  padding: 2rem;
+  background-color: #ffffff;
+}
+
+.schedule-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+/* ================= TABLE ================= */
+.schedule-table {
+  width: 100%;
+  margin: 0 auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ================= TABLE HEADER ================= */
+
+/* หัวตารางเวลา (แถวบน) */
+.schedule-table thead th {
+  padding: 1rem;
+  background-color: #334155; /* Slate 700 */
+  color: #F8FAFC;           /* Off-white */
+  font-weight: 600;
+  text-align: center;
+  border-right: 1px solid #475569;
+}
+
+/* หัวตารางวัน (คอลัมน์ซ้าย) */
+.schedule-table tbody td:first-child {
+  background-color: #475569; /* Slate 600 */
+  color: #F8FAFC;
+  font-weight: 600;
+  text-align: center;
+  vertical-align: middle;
+  border-right: 1px solid #CBD5E1;
+}
+
+
+/* ================= TABLE CELL ================= */
+.schedule-table td {
+  padding: 1rem;
+  text-align: center;
+  background-color: #ffffff;
+  border-top: 1px solid #eaeaea;
+  border-right: 1px solid #eaeaea;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ================= EMPTY SLOT ================= */
+.empty-slot {
+  background-color: #F9FAFB;
+}
+
+/* ================= CLASS TYPE COLORS ================= */
+
+/* Strength (แดง – Light Pink / Rose) */
+.schedule-table td.strength {
+  background-color: #FEE2E2 !important;
+  color: #7F1D1D !important;
+  font-weight: 500;
+}
+
+/* Flexibility (เขียว – Mint Green) */
+.schedule-table td.flexibility {
+  background-color: #DCFCE7 !important;
+  color: #14532D !important;
+  font-weight: 500;
+}
+
+/* Cardio (ฟ้า – Baby Blue) */
+.schedule-table td.cardio {
+  background-color: #DBEAFE !important;
+  color: #1E3A8A !important;
+  font-weight: 500;
+}
+
+.schedule-table td.cardio,
+.schedule-table td.flexibility,
+.schedule-table td.strength {
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+/* ================= BUTTON (SOFT COLORS) ================= */
+
+/* แก้ไข (Edit) – Amber Soft */
+.btn-warning {
+  background-color: #FCD34D !important; /* Soft Amber */
+  border-color: #FCD34D !important;
+  color: #92400E !important;           /* น้ำตาลเข้ม อ่านง่าย */
+}
+
+.btn-warning:hover {
+  background-color: #FBBF24 !important;
+  border-color: #FBBF24 !important;
+}
+
+/* เพิ่มคลาส (Add) – Soft Green */
+.btn-success {
+  background-color: #BBF7D0 !important; /* Pastel Green */
+  border-color: #BBF7D0 !important;
+  color: #166534 !important;
+}
+
+.btn-success:hover {
+  background-color: #86EFAC !important;
+  border-color: #86EFAC !important;
+}
+
+/* ลบ (Delete) – Soft Red */
+/* Delete Button – Strength Tone */
+.btn-danger {
+  background-color: #FEE2E2 !important; /* Strength (Rose) */
+  border: 1.5px solid #F87171 !important; /* rose เข้ม */
+  color: #7F1D1D !important;              /* ตัวอักษรแดงเข้ม */
+  font-weight: 500;
+}
+
+.btn-danger:hover {
+  background-color: #FCA5A5 !important;  /* rose เข้มขึ้น */
+  border-color: #EF4444 !important;
+  color: #7F1D1D !important;
+}
+/* ลดความแข็งของปุ่ม */
+.schedule-table .btn {
+  box-shadow: none;
+  font-weight: 500;
+}
+
+/* ระยะห่างปุ่มใน cell */
+.schedule-table .btn + .btn {
+  margin-left: 4px;
+}

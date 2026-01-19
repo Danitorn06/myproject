@@ -3,8 +3,11 @@ package controllers
 import (
 	"backend/config"
 	"backend/models"
+	"backend/untils"
+
 	"net/http"
 	"time"
+	
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
@@ -75,6 +78,18 @@ func Login(c *gin.Context) {
 	// 🍪 Set cookie (dev localhost)
 	c.SetCookie("token", tokenString, 3600*24, "/", "localhost", false, true)
 
+	c.Set("user_id", user.UserID)
+	c.Set("username", user.Username)
+    c.Set("role", user.Role)
+
+    // ✅ SAVE LOG
+    utils.SaveLog(
+        c,
+        "LOGIN",
+        "user login success",
+    )
+
+
 	// ✅ Response
 	c.JSON(http.StatusOK, gin.H{
 		"status":  "success",
@@ -102,6 +117,8 @@ func Logout(c *gin.Context) {
 		"status":  "success",
 		"message": "logout successful",
 	})
+	utils.SaveLog(c, "logout", "user logout")
+
 }
 
 // Register
@@ -145,7 +162,7 @@ func Register(c *gin.Context) {
 	})
 }
 
-// Profile (ตัวอย่าง Protected Route)
+// Profile
 func Profile(c *gin.Context) {
 	userID, _ := c.Get("user_id")
 	username, _ := c.Get("username")

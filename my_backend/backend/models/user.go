@@ -13,4 +13,6 @@ type User struct {
     QRCodePath   string    `json:"qr_code_path"`
     CreatedAt    time.Time `json:"created_at"`
     UpdatedAt    time.Time `json:"updated_at"`
+
+   
 }

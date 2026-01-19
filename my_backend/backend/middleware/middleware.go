@@ -2,6 +2,8 @@ package middleware
 
 import (
 	"backend/config"
+	"backend/untils"
+	"time"
 	"net/http"
 	"strings"
 	stdtime "time"
@@ -59,8 +61,9 @@ func AuthMiddleware() gin.HandlerFunc {
 		c.Set("user_id", claims["user_id"])
 		c.Set("username", claims["username"])
 		c.Set("role", claims["role"])
-
+		
 		c.Next()
+		
 	}
 }
 
@@ -84,5 +87,23 @@ func RequireRoles(roles ...string) gin.HandlerFunc {
 
 		c.JSON(http.StatusForbidden, gin.H{"error": "access denied"})
 		c.Abort()
+	}
+}
+
+func UserLogMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		start := time.Now()
+
+		c.Next() // 👉 รอ controller ทำงาน
+
+		// log หลัง request สำเร็จ
+		utils.SaveLog(
+			c,
+			c.Request.Method+" "+c.FullPath(),
+			"status="+string(rune(c.Writer.Status())),
+		)
+
+		_ = start // เผื่ออยากเก็บ response time
 	}
 }

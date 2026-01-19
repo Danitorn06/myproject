@@ -108,3 +108,40 @@ func CreateMembership(c *gin.Context) {
 		},
 	})
 }
+func DeleteMembership(c *gin.Context) {
+	id := c.Param("id")
+
+	result := config.DB.
+		Model(&models.Membership{}).
+		Where("membership_id = ?", id).
+		Update("status", "cancelled")
+
+	if result.RowsAffected == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "membership not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
+}
+
+
+func GetAllMemberMemberships(c *gin.Context) {
+	var memberships []models.Membership
+
+	err := config.DB.
+		Joins("JOIN users ON users.user_id = memberships.user_id").
+		Where("users.role = ?", "user").
+		Preload("User").
+		Preload("Package").
+		Order("memberships.membership_id ASC").
+		Find(&memberships).Error
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, memberships)
+}
+
+
