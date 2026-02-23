@@ -45,3 +45,29 @@
 .btn-delete-mini:hover {
   background-color: #FCA5A5;
 }
+
+.admin-news-image {
+  height: 160px;
+  object-fit: cover;
+}
+
+/* กรอบ modal สีส้ม */
+.delete-modal .modal-content {
+  border: 2px solid #FF7F11;
+  border-radius: 12px;
+}
+
+/* header ด้านบน */
+.delete-modal .modal-header {
+  border-bottom: 1px solid #FF7F11;
+}
+
+/* footer ด้านล่าง */
+.delete-modal .modal-footer {
+  border-top: 1px solid #FF7F11;
+}
+
+.delete-modal .modal-title {
+  color: #FF7F11;
+  font-weight: 600;
+}

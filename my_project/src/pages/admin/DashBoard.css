@@ -1,6 +1,16 @@
 /* ================= PRINT STYLE ================= */
 @media print {
 
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  .print-full {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+
   body * {
     visibility: hidden;
   }
@@ -11,20 +21,56 @@
   }
 
   .dashboard-print {
+    max-width: 100% !important;
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
   }
 
-  /* ซ่อนปุ่ม */
-  .d-print-none {
-    display: none !important;
-  }
-
+  /* ซ่อนปุ่ม / nav */
+  .d-print-none,
   nav,
   footer {
     display: none !important;
+  }
+
+  /* ===== FIX CARD HEIGHT (ตัวนี้สำคัญที่สุด) ===== */
+  .dashboard-print .h-100 {
+    height: auto !important;
+  }
+
+  /* ===== FIX CARD STYLE ===== */
+  .dashboard-print .card {
+    padding: 0.5rem !important;
+    margin: 0 auto 12px auto !important;
+  }
+
+  /* ===== FIX CHART OVERFLOW ===== */
+  .chart-wrapper {
+    width: 95% !important;
+    margin: 0 auto;
+  }
+
+  .recharts-responsive-container,
+  .recharts-surface {
+    overflow: visible !important;
+  }
+
+  /* ===== FIX TABLE ===== */
+  .table-responsive {
+    overflow: visible !important;
+  }
+
+  table {
+    width: 100% !important;
+    table-layout: fixed;
+  }
+
+  th,
+  td {
+    white-space: normal;
+    word-wrap: break-word;
   }
 
   /* คุมแบ่งหน้า */

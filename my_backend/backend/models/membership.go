@@ -17,6 +17,6 @@ type Membership struct {
 	User    User    `gorm:"foreignKey:UserID;references:UserID" json:"user"`
 	Package Package `gorm:"foreignKey:PackageID;references:PackageID" json:"package"`
 	MembershipInfo MembershipInfo `gorm:"foreignKey:MembershipID;references:MembershipID" json:"membership_info"`
-	Health   HealthAnswer  `gorm:"foreignKey:MembershipID;references:MembershipID" json:"health"`
+	//HealthAnswer   []HealthAnswer `gorm:"foreignKey:MembershipID;references:MembershipID" json:"health_answers"`
 	
 }

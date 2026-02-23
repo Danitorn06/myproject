@@ -79,7 +79,7 @@ const DashBoard = () => {
   }
 
   return (
-    <Container className="py-5 dashboard-print">
+    <Container  className="py-5 dashboard-print">
 
       {/* ===== HEADER ===== */}
       <Row className="mb-4 align-items-center">
@@ -110,12 +110,13 @@ const DashBoard = () => {
       <Row className="mb-4 g-4">
         <Col md={6}>
           <Card
-            className="shadow-lg h-100"
+            className="shadow-lg"
             style={{
               borderRadius: '20px',
               backgroundColor: '#ffffff',
               padding: '1rem',
-              border: '2px solid #FF7F11'
+              border: '2px solid #FF7F11',
+              height: 'auto'   // 🔥 สำคัญ
             }}
           >
             <Card.Body>
@@ -128,12 +129,13 @@ const DashBoard = () => {
 
         <Col md={6}>
           <Card
-            className="shadow-lg h-100"
+            className="shadow-lg"
             style={{
               borderRadius: '20px',
               backgroundColor: '#ffffff',
               padding: '1rem',
-              border: '2px solid #FF7F11'
+              border: '2px solid #FF7F11',
+              height: 'auto'   // 🔥 สำคัญ
             }}
           >
             <Card.Body>
@@ -149,49 +151,79 @@ const DashBoard = () => {
       <Row className="g-4">
         <Col md={6}>
           <Card
-            className="shadow-lg h-100"
+            className="shadow-lg"
             style={{
               borderRadius: '20px',
               backgroundColor: '#ffffff',
               padding: '1rem',
-              border: '2px solid #FF7F11'
+              border: '2px solid #FF7F11',
+              height: 'auto'   // 🔥 สำคัญ
             }}
           >
             <h6 className="text-center mb-3">ผู้ใช้งานแยกตามประเภท</h6>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie data={userByType} dataKey="value" nameKey="name" outerRadius={110} label>
-                  {userByType.map((_, index) => (
-                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
+            <div className="chart-wrapper">
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={userByType}
+                    dataKey="value"
+                    nameKey="name"
+                    outerRadius={110}
+                    label
+                  >
+                    {userByType.map((_, index) => (
+                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </Card>
         </Col>
 
         <Col md={6}>
           <Card
-            className="shadow-lg h-100"
+            className="shadow-lg"
             style={{
               borderRadius: '20px',
               backgroundColor: '#ffffff',
               padding: '1rem',
-              border: '2px solid #FF7F11'
+              border: '2px solid #FF7F11',
+              height: 'auto'   // 🔥 สำคัญ
             }}
           >
             <h6 className="text-center mb-3">สมัครสมาชิก (รายเดือน)</h6>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={monthlyMembers}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="members" fill="#FF7F11" radius={[6, 6, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            <div className="chart-wrapper">
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart
+                  data={monthlyMembers}
+                  margin={{ top: 20, right: 80, left: 40, bottom: 30 }}
+                  barCategoryGap="20%"
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+
+                  <XAxis
+                    dataKey="month"
+                    interval={0}
+                    tickMargin={10}
+                    padding={{ left: 20, right: 20 }}
+                  />
+
+                  <YAxis allowDecimals={false} />
+
+                  <Tooltip />
+
+                  <Bar
+                    dataKey="members"
+                    fill="#FF7F11"
+                    radius={[6, 6, 0, 0]}
+                    barSize={40}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </Card>
         </Col>
       </Row>
@@ -201,29 +233,32 @@ const DashBoard = () => {
       <Row className="mt-4">
         <Col>
           <Card
-            className="shadow-lg h-100"
+            className="shadow-lg"
             style={{
               borderRadius: '20px',
               backgroundColor: '#ffffff',
               padding: '1rem',
-              border: '2px solid #FF7F11'
+              border: '2px solid #FF7F11',
+              height: 'auto'   // 🔥 สำคัญ
             }}
           >
             <h6 className="text-center mb-3">ผู้เข้าใช้งานรายวัน</h6>
-            <ResponsiveContainer width="100%" height={320}>
-              <LineChart data={dailyVisits}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Line
-                  type="monotone"
-                  dataKey="visits"
-                  stroke="#FF7F11"
-                  strokeWidth={3}
-                />
-              </LineChart>
-            </ResponsiveContainer>
+            <div className="chart-wrapper">
+              <ResponsiveContainer width="100%" height={320}>
+                <LineChart data={dailyVisits}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line
+                    type="monotone"
+                    dataKey="visits"
+                    stroke="#FF7F11"
+                    strokeWidth={3}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </Card>
         </Col>
       </Row>

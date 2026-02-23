@@ -13,9 +13,9 @@ const classImages = [
 ];
 
 const CreateSchedule = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const params = new URLSearchParams(location.search);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const params = new URLSearchParams(location.search);
 
     const mode = params.get('mode');
     const classId = params.get('id');

@@ -80,6 +80,15 @@ const Login = () => {
               required
             />
           </div>
+          <div className="text-end mb-4">
+            <a
+              href="/forgot-password"
+              className="forgot-link text-primary fw-semibold"
+              style={{ fontSize: "0.9rem" }}
+            >
+              ลืมรหัสผ่าน?
+            </a>
+          </div>
 
           <button type="submit" className="btn btn-primary btn-lg w-100">เข้าสู่ระบบ</button>
 

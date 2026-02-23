@@ -7,9 +7,10 @@ import Login from './pages/Login';
 import SignIn from './pages/SignIn';
 import Packages from './pages/package';
 import Myprofile from './pages/Myprofile';
-import Membership from  "./pages/Membership";
+import Membership from "./pages/Membership";
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ForgotPassword from './pages/ForgotPassword';
 
 
 // หน้า Admin
@@ -24,6 +25,8 @@ import AdminUserList from './pages/admin/AdminUserList';
 import AdminCreateUser from './pages/admin/AdminCreateUser';
 import AdminSettings from './pages/admin/AdminSetting';
 import AdminMembershipList from './pages/admin/AdminMembershipList';
+import AdminUserEdit from "./pages/admin/AdminUserEdit";
+
 
 // PrivateRoute
 import PrivateRoute from './components/PrivateRoute';
@@ -44,7 +47,7 @@ function App() {
               <>
                 <Sliceshow />
                 <News limit={3} hideFilter={true} />
-                
+
                 <Schedule showGuide={false} />
               </>
             }
@@ -55,6 +58,7 @@ function App() {
           <Route path="/package" element={<Packages />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signin" element={<SignIn />} />
+           <Route path="/forgot-password" element={<ForgotPassword />} />
 
           {/* หน้า User protected ด้วย PrivateRoute */}
           <Route
@@ -81,6 +85,15 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/admin/users/edit/:id"
+            element={
+              <PrivateRoute roleRequired="admin">
+                <AdminUserEdit />
+              </PrivateRoute>
+            }
+          />
+
           <Route
             path="/admin/users/create"
             element={
@@ -158,7 +171,7 @@ function App() {
               </PrivateRoute>
             }
           />
-        <Route
+          <Route
             path="/admin/packages"
             element={
               <PrivateRoute roleRequired="admin">
@@ -166,7 +179,7 @@ function App() {
               </PrivateRoute>
             }
           />
-        <Route
+          <Route
             path="/admin/settings"
             element={
               <PrivateRoute roleRequired="admin">
@@ -175,7 +188,7 @@ function App() {
             }
           />
         </Routes>
-       <Footer />
+        <Footer />
       </div>
     </Router>
   );

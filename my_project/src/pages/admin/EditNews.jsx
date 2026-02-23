@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+import { Container, Row, Col, Card, Form, Button, Modal } from "react-bootstrap";
 import axiosInstance from '../../axiosInstance';
 
 const EditNews = () => {
@@ -14,6 +14,9 @@ const EditNews = () => {
 
   const [imageFile, setImageFile] = useState(null);
   const [previewImage, setPreviewImage] = useState('');
+
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // ดึงข่าวเดิม
   const fetchNews = useCallback(async () => {
@@ -39,9 +42,15 @@ const EditNews = () => {
     setPreviewImage(URL.createObjectURL(file));
   };
 
-  // ส่งฟอร์ม
-  const handleSubmit = async (e) => {
+  // เปิด confirm modal
+  const handleSubmit = (e) => {
     e.preventDefault();
+    setShowConfirm(true);
+  };
+
+  // submit จริง
+  const submitEdit = async () => {
+    setLoading(true);
 
     const formData = new FormData();
     formData.append("title", title);
@@ -61,11 +70,13 @@ const EditNews = () => {
         headers: { "Content-Type": "multipart/form-data" }
       });
 
-      alert("แก้ไขข่าวสำเร็จ");
       navigate("/admin/news");
     } catch (err) {
       console.error(err);
       alert("แก้ไขข่าวไม่สำเร็จ");
+    } finally {
+      setLoading(false);
+      setShowConfirm(false);
     }
   };
 
@@ -73,7 +84,9 @@ const EditNews = () => {
     <Container className="my-5">
       <Row className="justify-content-center">
         <Col md={8}>
-          <Card>
+          <Card style={{
+            border: "2px solid #FF7F11"
+          }}>
             <Card.Body>
               <Card.Title>แก้ไขข่าว</Card.Title>
 
@@ -100,7 +113,11 @@ const EditNews = () => {
 
                 <Form.Group className="mb-3">
                   <Form.Label>รูปภาพ</Form.Label>
-                  <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
+                  <Form.Control
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
 
                   {previewImage && (
                     <img
@@ -114,7 +131,10 @@ const EditNews = () => {
 
                 <Form.Group className="mb-3">
                   <Form.Label>ประเภทข่าว</Form.Label>
-                  <Form.Select value={type} onChange={(e) => setType(e.target.value)}>
+                  <Form.Select
+                    value={type}
+                    onChange={(e) => setType(e.target.value)}
+                  >
                     <option value="general">ทั่วไป</option>
                     <option value="health">สุขภาพ</option>
                   </Form.Select>
@@ -131,10 +151,15 @@ const EditNews = () => {
                 </Form.Group>
 
                 <div className="d-flex justify-content-end gap-2">
-                  <Button variant="secondary" onClick={() => navigate('/admin/news')}>
+                  <Button
+                    variant="secondary"
+                    onClick={() => navigate('/admin/news')}
+                  >
                     ยกเลิก
                   </Button>
-                  <Button type="submit">บันทึก</Button>
+                  <Button type="submit">
+                    บันทึก
+                  </Button>
                 </div>
               </Form>
 
@@ -142,6 +167,49 @@ const EditNews = () => {
           </Card>
         </Col>
       </Row>
+
+      {/* Confirm Modal */}
+      <Modal
+        show={showConfirm}
+        onHide={() => setShowConfirm(false)}
+        centered
+      >
+        <div
+          style={{
+            border: "2px solid #FF7F11",
+            borderRadius: "8px"
+          }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>ยืนยันการแก้ไข</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            คุณต้องการบันทึกการแก้ไขข่าวนี้ใช่หรือไม่?
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => setShowConfirm(false)}
+            >
+              ยกเลิก
+            </Button>
+
+            <Button
+              style={{
+                backgroundColor: "#FF7F11",
+                borderColor: "#FF7F11"
+              }}
+              onClick={submitEdit}
+              disabled={loading}
+            >
+              {loading ? "กำลังบันทึก..." : "ยืนยัน"}
+            </Button>
+          </Modal.Footer>
+        </div>
+      </Modal>
+
     </Container>
   );
 };

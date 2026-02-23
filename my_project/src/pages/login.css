@@ -13,3 +13,8 @@
   background-color: rgba(0,0,0,0.4); /* ปรับความเข้ม/จางได้ */
   z-index: 0;
 }
+/* login.css */
+.forgot-link:hover {
+  text-decoration: underline;
+  opacity: 0.85;
+}

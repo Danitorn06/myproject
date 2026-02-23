@@ -1,11 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Button, Container, Row, Col, Alert } from 'react-bootstrap';
+import {
+  Card,
+  Button,
+  Container,
+  Row,
+  Col,
+  Alert,
+  Modal,
+  Spinner
+} from 'react-bootstrap';
 import axiosInstance from '../../axiosInstance';
 import './AdminNews.css';
 
 const AdminNews = () => {
   const [newsList, setNewsList] = useState([]);
+
+  // ⭐ state สำหรับ modal ลบ
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedNews, setSelectedNews] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchNews = async () => {
     try {
@@ -24,16 +38,27 @@ const AdminNews = () => {
     fetchNews();
   }, []);
 
-  const handleDelete = async (id) => {
-    if (window.confirm('คุณต้องการลบข่าวนี้หรือไม่?')) {
-      try {
-        await axiosInstance.delete(`/news/${id}`);
-        alert('ลบข่าวเรียบร้อยแล้ว');
-        fetchNews();
-      } catch (err) {
-        console.error('ลบข่าวล้มเหลว:', err);
-        if (err.response?.status === 401) window.location.href = '/login';
-      }
+  // เปิด modal
+  const openDeleteModal = (news) => {
+    setSelectedNews(news);
+    setShowDeleteModal(true);
+  };
+
+  // ลบจริง
+  const confirmDelete = async () => {
+    if (!selectedNews) return;
+
+    try {
+      setIsDeleting(true);
+      await axiosInstance.delete(`/news/${selectedNews.news_id}`);
+      setShowDeleteModal(false);
+      setSelectedNews(null);
+      fetchNews();
+    } catch (err) {
+      console.error('ลบข่าวล้มเหลว:', err);
+      alert('เกิดข้อผิดพลาดในการลบข่าว');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -58,9 +83,9 @@ const AdminNews = () => {
           {newsList.map((news) => (
             <Col key={news.news_id}>
               <Card className="admin-news-card h-100">
-                {news.image && (
+                {news.image_url && (
                   <Card.Img
-                    src={news.image}
+                    src={news.image_url}
                     alt={news.title}
                     className="admin-news-image"
                   />
@@ -88,7 +113,7 @@ const AdminNews = () => {
                     <Button
                       size="sm"
                       className="btn-delete-mini"
-                      onClick={() => handleDelete(news.news_id)}
+                      onClick={() => openDeleteModal(news)}
                     >
                       ลบ
                     </Button>
@@ -99,6 +124,57 @@ const AdminNews = () => {
           ))}
         </Row>
       )}
+
+      {/* ⭐ MODAL ยืนยันการลบ */}
+      <Modal
+        show={showDeleteModal}
+        onHide={() => setShowDeleteModal(false)}
+        dialogClassName="delete-modal"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title className="text-danger">
+            ⚠️ ยืนยันการลบข่าว
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <p>
+            คุณกำลังจะลบข่าว:
+            <strong className="d-block mt-2">
+              {selectedNews?.title}
+            </strong>
+          </p>
+          <p className="text-danger mb-0">
+            การลบนี้ไม่สามารถกู้คืนได้
+          </p>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowDeleteModal(false)}
+            disabled={isDeleting}
+          >
+            ยกเลิก
+          </Button>
+
+          <Button
+            variant="danger"
+            onClick={confirmDelete}
+            disabled={isDeleting}
+          >
+            {isDeleting ? (
+              <>
+                <Spinner size="sm" className="me-2" />
+                กำลังลบ...
+              </>
+            ) : (
+              'ลบข่าว'
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };
