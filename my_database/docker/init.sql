@@ -147,5 +147,12 @@ CREATE TABLE user_logs (
     user_agent TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+type FitnessVisit struct {
+	ID           uint      `gorm:"primaryKey"`
+	MembershipID uint      `gorm:"index" json:"membership_id"`
+	VisitDate    time.Time `gorm:"not null" json:"visit_date"`
+	CreatedAt    time.Time
 
+	Membership Membership `gorm:"foreignKey:MembershipID;references:MembershipID"`
+}
 

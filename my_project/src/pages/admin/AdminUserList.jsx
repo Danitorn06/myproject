@@ -79,14 +79,14 @@ export default function AdminUserList() {
     }
   };
   const PACKAGE_MAP = {
-  1: { userType: "นักเรียน/นักศึกษา", duration: "รายเดือน" },
-  3: { userType: "บุคลากรในมหาวิทยาลัย", duration: "รายเดือน" },
-  5: { userType: "บุคคลภายนอก", duration: "รายเดือน" },
+    1: { userType: "นักเรียน/นักศึกษา", duration: "รายเดือน" },
+    3: { userType: "บุคลากรในมหาวิทยาลัย", duration: "รายเดือน" },
+    5: { userType: "บุคคลภายนอก", duration: "รายเดือน" },
 
-  2: { userType: "นักเรียน/นักศึกษา", duration: "4 เดือน" },
-  4: { userType: "บุคลากรในมหาวิทยาลัย", duration: "4 เดือน" },
-  6: { userType: "บุคคลภายนอก", duration: "4 เดือน" },
-};
+    2: { userType: "นักเรียน/นักศึกษา", duration: "4 เดือน" },
+    4: { userType: "บุคลากรในมหาวิทยาลัย", duration: "4 เดือน" },
+    6: { userType: "บุคคลภายนอก", duration: "4 เดือน" },
+  };
   const formatDateTime = (dateString) => {
     if (!dateString) return "-";
 
@@ -99,6 +99,29 @@ export default function AdminUserList() {
       hour: "2-digit",
       minute: "2-digit",
     });
+
+  };
+  const handleVisit = (membershipId) => {
+    if (!membershipId) {
+      alert("ไม่มี Membership");
+      return;
+    }
+
+    fetch(`http://localhost:8080/api/v1/admin/visits/${membershipId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          return res.json().then(err => { throw err });
+        }
+        return res.json();
+      })
+      .then(() => alert("บันทึกสำเร็จ"))
+      .catch((err) => alert(err.error));
   };
   // ================= DELETE =================
 
@@ -238,6 +261,14 @@ export default function AdminUserList() {
 
                     <td>
                       <Button
+                        variant="success"
+                        size="sm"
+                        className="me-2"
+                        onClick={() => handleVisit(membership?.membership_id)}
+                      >
+                        Visit
+                      </Button>
+                      <Button
                         variant="info"
                         size="sm"
                         className="me-2"
@@ -266,6 +297,7 @@ export default function AdminUserList() {
                       >
                         Delete
                       </Button>
+
                     </td>
                   </tr>
 

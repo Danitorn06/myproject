@@ -111,20 +111,30 @@ func SetupRoutes(r *gin.Engine) {
 
 				membershipAdmin.DELETE("/:id", controllers.DeleteMembership)
 			}
+			adminvisit := protected.Group("/admin")
+			adminvisit.Use(middleware.RequireRoles("admin"))
+			{
+				adminvisit.GET("/visits", controllers.GetAllVisits)
+				adminvisit.GET("/visits/:id", controllers.GetVisitByMember)
+				adminvisit.POST("/visits/:id", controllers.CreateVisit)
+			}	
 
 			adminlog := protected.Group("/admin")
 			adminlog.Use(middleware.RequireRoles("admin"))
 			{
 				adminlog.GET("/logs", controllers.GetUserLogs)
 			}
+			adminDashboard := protected.Group("/admin")
+			adminDashboard.Use(middleware.RequireRoles("admin"))
+			{
+				adminDashboard.GET("/dashboard-summary", controllers.GetDashboardSummary)
+				adminDashboard.GET("/user-type", controllers.GetUserByType)
+				adminDashboard.GET("/dashboard/members", controllers.GetMemberStats)
+				adminDashboard.GET("/dashboard/visits", controllers.GetVisitStats)
+			}		
 
-			// 📦 Packages (เฉพาะ admin)
-			/*packages := protected.Group("/packages")
-			  packages.Use(middleware.RequireRoles("admin"))
-			  {
-			      packages.GET("", controllers.GetPackages)
-			      packages.POST("", controllers.CreatePackage)
-			  }*/
+
+
 		}
 	}
 }

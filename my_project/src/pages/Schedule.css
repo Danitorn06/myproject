@@ -1,134 +1,140 @@
 /* ================= SECTION ================= */
 .schedule-section {
   padding: 2rem;
-  background-color: #ffffff;
-}
-
-.schedule-title {
-  text-align: center;
-  font-size: 2rem;
-  margin-bottom: 2rem;
-  color: #333;
+  background-color: #fffaf5; /* ส้มอ่อนมาก */
 }
 
 /* ================= TABLE ================= */
 .schedule-table {
   width: 100%;
-  margin: 0 auto;
-  border-collapse: separate;
-  border-spacing: 0;
-  background-color: #ffffff;
-  border-radius: 12px;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
 }
 
-/* ================= TABLE HEADER ================= */
-.schedule-table th {
-  padding: 1rem;
-  background: linear-gradient(135deg, #ff6a00, #ff4500);
+/* ================= HEADER ================= */
+.schedule-table thead th {
+  padding: 0.9rem;
+  background-color: #fb923c; /* ส้มกลาง */
   color: #ffffff;
+  font-weight: 500;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* ================= DAY COLUMN ================= */
+.schedule-table tbody td:first-child {
+  background-color: #fed7aa; /* ส้มอ่อน */
+  color: #7c2d12;
   font-weight: 600;
   text-align: center;
-  border: none;
+  vertical-align: middle;
+  width: 130px;
 }
 
 /* ================= TABLE CELL ================= */
 .schedule-table td {
-  padding: 6px;
+  padding: 0.9rem;
   text-align: center;
-  vertical-align: middle;
-  background-color: #ffffff;
-  border-top: 1px solid #eaeaea;
-  border-right: 1px solid #eaeaea;
+  border: 1px solid #f3f4f6;
+  font-size: 0.85rem;
+  transition: background-color 0.2s ease;
 }
 
-/* ลบเส้นขวาสุด */
-.schedule-table td:last-child,
-.schedule-table th:last-child {
-  border-right: none;
+/* hover แถว */
+.schedule-table tbody tr:hover td:not(:first-child) {
+  background-color: #fff7ed;
 }
 
-/* ================= CELL HEIGHT ================= */
-.schedule-cell {
-  height: 90px;
-}
-
-/* ================= IMAGE WRAPPER ================= */
-.class-image-wrapper {
-  position: relative;
-  width: 100%;
-  height: 80px;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-/* ================= IMAGE ================= */
-.class-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* ================= CLASS NAME OVERLAY ================= */
-.class-name-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 4px 6px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #ffffff;
-  text-align: center;
-  background: rgba(0, 0, 0, 0.6);
-}
-
-/* ================= EMPTY CELL ================= */
-.empty-cell {
-  color: #cccccc;
-  font-size: 14px;
+/* ================= EMPTY SLOT ================= */
+.schedule-table td:empty {
+  background-color: #fafafa;
 }
 
 /* ================= CLASS TYPE COLORS ================= */
 
-/* Cardio */
-.cardio .class-name-overlay {
-  background: rgba(0, 188, 212, 0.85);
+/* Cardio – Soft Blue */
+.schedule-table td.cardio {
+  background-color: #eff6ff;
+  color: #1e40af;
+  font-weight: 500;
+  border-radius: 6px;
 }
 
-/* Strength */
-.strength .class-name-overlay {
-  background: rgba(244, 67, 54, 0.85);
+/* Strength – Soft Red */
+.schedule-table td.strength {
+  background-color: #fef2f2;
+  color: #991b1b;
+  font-weight: 500;
+  border-radius: 6px;
 }
 
-/* Flexibility */
-.flexibility .class-name-overlay {
-  background: rgba(76, 175, 80, 0.85);
+/* Flexibility – Soft Green */
+.schedule-table td.flexibility {
+  background-color: #f0fdf4;
+  color: #166534;
+  font-weight: 500;
+  border-radius: 6px;
 }
 
-/* ================= HOVER EFFECT ================= */
-.class-image-wrapper:hover {
-  transform: scale(1.03);
-  transition: transform 0.2s ease;
+/* Hover class */
+.schedule-table td.cardio:hover,
+.schedule-table td.strength:hover,
+.schedule-table td.flexibility:hover {
+  transform: scale(1.02);
+  cursor: pointer;
+}
+
+/* ================= GUIDE ================= */
+.schedule-guide .card {
+  border-radius: 14px;
+  border: 1px solid #f3f4f6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.schedule-guide h5 {
+  font-weight: 600;
+  color: #ea580c;
+}
+
+/* ================= BUTTON ================= */
+
+.btn-success {
+  background-color: #fb923c !important;
+  border: none !important;
+}
+
+.btn-success:hover {
+  background-color: #f97316 !important;
+}
+
+.btn-warning {
+  background-color: #fed7aa !important;
+  border: none !important;
+  color: #7c2d12 !important;
+}
+
+.btn-danger {
+  background-color: #fca5a5 !important;
+  border: none !important;
+  color: #7f1d1d !important;
+}
+
+/* Remove strong shadow */
+.schedule-table .btn {
+  box-shadow: none !important;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 6px;
 }
 
 /* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
-  .schedule-title {
-    font-size: 1.5rem;
+  .schedule-table td,
+  .schedule-table th {
+    padding: 0.6rem;
+    font-size: 0.75rem;
   }
-
-  .class-image-wrapper {
-    height: 70px;
-  }
-
-  .class-name-overlay {
-    font-size: 11px;
-  }
-}
-.schedule-table td {
-  vertical-align: middle;
-  height: 90px; /* คุมความสูง */
 }

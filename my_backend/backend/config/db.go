@@ -51,6 +51,7 @@ func ConnectDatabase() {
 		&models.News{},
 		&models.MembershipInfo{},
 		&models.HealthAnswer{},
+		&models.FitnessVisit{},
 
 	)
 	if err != nil {

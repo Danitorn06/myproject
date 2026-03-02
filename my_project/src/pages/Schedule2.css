@@ -1,0 +1,134 @@
+/* ================= SECTION ================= */
+.schedule-section {
+  padding: 2rem;
+  background-color: #ffffff;
+}
+
+.schedule-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+/* ================= TABLE ================= */
+.schedule-table {
+  width: 100%;
+  margin: 0 auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ================= TABLE HEADER ================= */
+.schedule-table th {
+  padding: 1rem;
+  background: linear-gradient(135deg, #ff6a00, #ff4500);
+  color: #ffffff;
+  font-weight: 600;
+  text-align: center;
+  border: none;
+}
+
+/* ================= TABLE CELL ================= */
+.schedule-table td {
+  padding: 6px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #ffffff;
+  border-top: 1px solid #eaeaea;
+  border-right: 1px solid #eaeaea;
+}
+
+/* ลบเส้นขวาสุด */
+.schedule-table td:last-child,
+.schedule-table th:last-child {
+  border-right: none;
+}
+
+/* ================= CELL HEIGHT ================= */
+.schedule-cell {
+  height: 90px;
+}
+
+/* ================= IMAGE WRAPPER ================= */
+.class-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* ================= IMAGE ================= */
+.class-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ================= CLASS NAME OVERLAY ================= */
+.class-name-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 4px 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #ffffff;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* ================= EMPTY CELL ================= */
+.empty-cell {
+  color: #cccccc;
+  font-size: 14px;
+}
+
+/* ================= CLASS TYPE COLORS ================= */
+
+/* Cardio */
+.cardio .class-name-overlay {
+  background: rgba(0, 188, 212, 0.85);
+}
+
+/* Strength */
+.strength .class-name-overlay {
+  background: rgba(244, 67, 54, 0.85);
+}
+
+/* Flexibility */
+.flexibility .class-name-overlay {
+  background: rgba(76, 175, 80, 0.85);
+}
+
+/* ================= HOVER EFFECT ================= */
+.class-image-wrapper:hover {
+  transform: scale(1.03);
+  transition: transform 0.2s ease;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .schedule-title {
+    font-size: 1.5rem;
+  }
+
+  .class-image-wrapper {
+    height: 70px;
+  }
+
+  .class-name-overlay {
+    font-size: 11px;
+  }
+}
+.schedule-table td {
+  vertical-align: middle;
+  height: 90px; /* คุมความสูง */
+}
