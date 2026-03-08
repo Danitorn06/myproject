@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './DashBoard.css';
-import { Container, Row, Col, Card, Spinner, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Spinner } from 'react-bootstrap';
 import {
   PieChart, Pie, Cell, Legend, Tooltip,
   BarChart, Bar,
@@ -79,7 +79,7 @@ const DashBoard = () => {
         console.log("Members:", data);
 
         const formatted = (data.data || []).map(item => ({
-          period: item.period,
+          period: item.period?.split("T")[0], // ตัดเวลาออก
           total: item.total
         }));
 
@@ -98,10 +98,13 @@ const DashBoard = () => {
       .then(data => {
         console.log("Visits:", data);
 
-        const formatted = (data.data || []).map(item => ({
-          period: item.period,
-          total: item.total
-        }));
+        const formatted = (data.data || []).map(item => {
+          const date = new Date(item.period);
+          return {
+            period: date.toLocaleDateString("th-TH"),
+            total: item.total
+          };
+        });
 
         setVisits(formatted);
       });
@@ -148,9 +151,14 @@ const DashBoard = () => {
 
       <Row className="mb-4">
         <Col>
-          <h2 className="fw-bold" style={{ color: '#FF7F11' }}>
-            Fitness Admin Dashboard
+          <h2 style={{ color: '#FF7F11' }} className="fw-bold">
+            <i className="bi bi-bar-chart-line me-2"></i>
+            Fitness Dashboard
           </h2>
+          <p className="text-muted mb-0">
+            SU.ED FITNESS CENTER<br />
+            วันที่จัดทำรายงาน: {new Date().toLocaleDateString('th-TH')}
+          </p>
         </Col>
       </Row>
 
@@ -193,7 +201,19 @@ const DashBoard = () => {
         {/* MEMBERS */}
         <Col md={6}>
           <Card className="p-4 shadow border-warning">
-            <h6>สมัครสมาชิก ({memberType})</h6>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <h6 className="mb-0">สมัครสมาชิก ({memberType})</h6>
+
+              <select
+                className="form-select w-auto"
+                value={memberType}
+                onChange={(e) => setMemberType(e.target.value)}
+              >
+                <option value="daily">รายวัน</option>
+                <option value="monthly">รายเดือน</option>
+                <option value="yearly">รายปี</option>
+              </select>
+            </div>
 
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={members}>
@@ -212,7 +232,19 @@ const DashBoard = () => {
       <Row className="mb-4">
         <Col>
           <Card className="p-4 shadow border-warning">
-            <h6>การเข้าใช้งาน ({visitType})</h6>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <h6 className="mb-0">การเข้าใช้งาน ({visitType})</h6>
+
+              <select
+                className="form-select w-auto"
+                value={visitType}
+                onChange={(e) => setVisitType(e.target.value)}
+              >
+                <option value="daily">รายวัน</option>
+                <option value="monthly">รายเดือน</option>
+                <option value="yearly">รายปี</option>
+              </select>
+            </div>
 
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={visits}>
@@ -280,8 +312,8 @@ const DashBoard = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {recentVisits
-                        .filter((visit) => {
+                      {(() => {
+                        const filteredVisits = recentVisits.filter((visit) => {
 
                           const membershipNo = visit.Membership?.membership_no?.toLowerCase() || "";
                           const fullName = visit.Membership?.user?.full_name?.toLowerCase() || "";
@@ -298,21 +330,29 @@ const DashBoard = () => {
                           }
 
                           return searchMatch && dateMatch;
-                        })
-                        .map((visit) => (
-                          <tr key={visit.visit_id}>
-                            <td>
-                              {visit.visit_date?.replace('T', ' ').split('.')[0]}
-                            </td>
-                            <td>{visit.Membership?.membership_no}</td>
-                            <td>{visit.Membership?.user?.full_name}</td>
-                            <td>
-                              <span className="badge bg-success">
-                                Checked-in
-                              </span>
-                            </td>
-                          </tr>
-                        ))}
+                        });
+
+                        return (
+                          <>
+                            <p className="text-muted">
+                              แสดง {filteredVisits.length} รายการ
+                            </p>
+
+                            {filteredVisits.map((visit) => (
+                              <tr key={visit.ID}>
+                                <td>{visit.visit_date?.replace('T', ' ').split('.')[0]}</td>
+                                <td>{visit.Membership?.membership_no}</td>
+                                <td>{visit.Membership?.user?.full_name}</td>
+                                <td>
+                                  <span className="badge bg-success">
+                                    Checked-in
+                                  </span>
+                                </td>
+                              </tr>
+                            ))}
+                          </>
+                        );
+                      })()}
                     </tbody>
                   </table>
                 </div>

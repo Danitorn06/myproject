@@ -1,22 +1,24 @@
 .carousel-container {
-  max-height: 500px; /* กำหนดความสูงสูงสุด */
+  max-height: 500px;
   overflow: hidden;
-  border-radius: 0 0 15px 15px; /* มุมโค้ง */
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* เงา */
+  border-radius: 0 0 15px 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  background:  #f5f5f5; /* กันพื้นที่ว่าง */
 }
 
 .carousel-container img {
-  object-fit: cover;
-  height: 500px; /* ให้รูปสูงเท่ากัน */
+  object-fit: contain;   /* ⭐ เห็นรูปทั้งหมด */
+  height: 500px;
+  width: 100%;
 }
 
 .carousel-caption {
-  background: rgba(0, 0, 0, 0.5); /* พื้นหลังโปร่งดำ */
+  background: rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   padding: 15px 20px;
 }
 
 .carousel-caption h3,
 .carousel-caption p {
-  color: #fff !important; /* ให้ตัวหนังสือเป็นขาว */
+  color: #fff !important;
 }

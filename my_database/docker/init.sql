@@ -26,7 +26,7 @@ CREATE TABLE packages (
 CREATE TABLE memberships (
     membership_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
-    membership_no INT NOT NULL,
+    membership_no VARCHAR(50) NOT NULL,
     package_id INT NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
